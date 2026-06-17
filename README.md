@@ -2,6 +2,12 @@
 
 Site statique local de révision pour les sujets système et réseau du Common Core.
 
+## Périmètre
+
+- `01 - Born2beRoot`
+- `02 - Net_Practice`, avec l’outil `net_practice.1.9` intégré dans la même fiche
+- `03 - Inception`
+
 ## Utilisation
 
 Ouvrir `index.html` dans un navigateur.

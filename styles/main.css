@@ -161,35 +161,56 @@ a:focus-visible {
 }
 
 .sidebar-shortcut {
+  position: relative;
   display: block;
   margin-top: auto;
-  border: 1px solid var(--line);
+  border: 1px solid var(--accent);
   border-radius: var(--radius);
-  background: var(--surface);
-  color: var(--ink);
-  padding: 0.75rem 0.85rem;
+  background: var(--accent-dark);
+  color: white;
+  padding: 0.8rem 2.35rem 0.85rem 0.9rem;
   text-decoration: none;
+  box-shadow: 0 10px 24px rgb(29 37 45 / 0.14);
 }
 
 .sidebar-shortcut:hover {
-  border-color: var(--accent);
+  background: var(--accent);
 }
 
-.sidebar-shortcut span,
-.sidebar-shortcut strong {
+.sidebar-shortcut::after {
+  content: "->";
+  position: absolute;
+  right: 0.9rem;
+  top: 50%;
+  color: white;
+  font-weight: 800;
+  transform: translateY(-50%);
+}
+
+.shortcut-label,
+.shortcut-name,
+.shortcut-hint {
   display: block;
 }
 
-.sidebar-shortcut span {
-  color: var(--muted);
+.shortcut-label {
+  color: rgb(255 255 255 / 0.72);
   font-size: 0.75rem;
   font-weight: 700;
   text-transform: uppercase;
 }
 
-.sidebar-shortcut strong {
-  font-size: 0.95rem;
+.shortcut-name {
+  margin-top: 0.1rem;
+  font-size: 1rem;
   line-height: 1.25;
+}
+
+.shortcut-hint {
+  margin-top: 0.15rem;
+  color: rgb(255 255 255 / 0.78);
+  font-size: 0.77rem;
+  line-height: 1.3;
 }
 
 .content {
