@@ -345,6 +345,48 @@ button:hover {
   font-size: 0.79rem;
 }
 
+.preamble {
+  margin: 0 0 1.7rem;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 1.25rem 0 1.4rem;
+}
+
+.preamble-kicker {
+  margin: 0 0 0.25rem;
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.preamble h3 {
+  margin: 0 0 0.7rem;
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.preamble > p {
+  max-width: 78ch;
+}
+
+.preamble-section {
+  margin-top: 1.35rem;
+  padding-left: 1rem;
+  border-left: 4px solid var(--accent);
+}
+
+.preamble-section h4 {
+  margin: 0 0 0.35rem;
+  color: var(--accent-dark);
+  font-size: 1rem;
+}
+
+.preamble-section p {
+  max-width: 78ch;
+  margin: 0.25rem 0;
+}
+
 .overview {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));

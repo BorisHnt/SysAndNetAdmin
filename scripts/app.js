@@ -52,6 +52,52 @@ function renderTextList(lines) {
   return lines.map((line) => `<li data-reading>${escapeHtml(line)}</li>`).join("");
 }
 
+function renderPreamble(preamble) {
+  if (!preamble || !Array.isArray(preamble.sections) || preamble.sections.length === 0) {
+    return "";
+  }
+
+  const intro = Array.isArray(preamble.intro)
+    ? preamble.intro.map((line) => `<p data-reading>${escapeHtml(line)}</p>`).join("")
+    : "";
+
+  const sections = preamble.sections
+    .map((section) => {
+      const body = Array.isArray(section.body)
+        ? section.body.map((line) => `<p data-reading>${escapeHtml(line)}</p>`).join("")
+        : "";
+      const code = section.code
+        ? `<pre><code>${escapeHtml(section.code)}</code></pre>`
+        : "";
+      const warning = section.warning
+        ? `<p class="mistake" data-reading>${escapeHtml(section.warning)}</p>`
+        : "";
+      const tip = section.tip
+        ? `<p class="tip" data-reading>${escapeHtml(section.tip)}</p>`
+        : "";
+
+      return `
+        <section class="preamble-section">
+          <h4>${escapeHtml(section.title)}</h4>
+          ${body}
+          ${code}
+          ${warning}
+          ${tip}
+        </section>
+      `;
+    })
+    .join("");
+
+  return `
+    <section class="preamble" aria-label="Préambule théorique">
+      <p class="preamble-kicker">Cours théorique</p>
+      <h3>${escapeHtml(preamble.title)}</h3>
+      ${intro}
+      ${sections}
+    </section>
+  `;
+}
+
 function renderNav() {
   elements.nav.innerHTML = state.topics
     .map((topic) => {
@@ -115,6 +161,7 @@ function renderTopic(topicId, conceptSlug = "") {
         <li>${topic.concepts.length} notions</li>
         <li>${escapeHtml(topic.focus)}</li>
       </ul>
+      ${renderPreamble(topic.preamble)}
       <section class="overview" aria-label="Objectifs et notions">
         <div>
           <h3>Objectifs</h3>

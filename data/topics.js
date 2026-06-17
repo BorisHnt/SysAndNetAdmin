@@ -326,6 +326,224 @@ window.SYSADMIN_TOPICS = [
       "Comprendre les routes d’aller et de retour entre hosts, routeurs et Internet simulé.",
       "Utiliser l’interface net_practice.1.9 pour s’entraîner, vérifier et exporter les dix configurations."
     ],
+    "preamble": {
+      "title": "Bible Net_Practice : comprendre avant de remplir",
+      "intro": [
+        "Cette section est à lire comme un cours de base avant les niveaux.",
+        "Net_Practice devient beaucoup plus simple quand tu arrêtes de voir des cases à remplir et que tu vois un paquet qui part d’une interface, traverse des équipements, puis doit revenir.",
+        "Le but n’est pas de deviner une configuration qui passe le check, mais de savoir prouver pourquoi chaque IP, chaque masque, chaque gateway et chaque route est valide."
+      ],
+      "sections": [
+        {
+          "title": "1. Le modèle mental : un paquet doit partir et revenir",
+          "body": [
+            "Quand un PC veut joindre une adresse, il commence par demander : la destination est-elle dans mon réseau local ?",
+            "Si oui, il peut essayer de parler directement sur le même segment.",
+            "Si non, il envoie le paquet à sa gateway, c’est-à-dire au routeur local.",
+            "Ensuite, chaque routeur fait le même travail : regarder la destination, choisir une route, envoyer au prochain équipement.",
+            "La communication ne marche que si le chemin retour existe aussi. Un aller sans retour donne un échec."
+          ],
+          "code": "PC A -> gateway locale -> routeur -> routeur suivant -> PC B\nPC B -> gateway locale -> routeur -> routeur suivant -> PC A",
+          "warning": "Ne valide jamais seulement le chemin aller. Beaucoup de niveaux échouent parce que le retour manque.",
+          "tip": "Trace toujours deux flèches : destination aller, puis réponse retour."
+        },
+        {
+          "title": "2. Une IP identifie une interface, pas toute la machine",
+          "body": [
+            "Une machine peut avoir plusieurs interfaces réseau, donc plusieurs IP.",
+            "Un routeur a généralement plusieurs interfaces parce qu’il relie plusieurs réseaux.",
+            "Chaque interface doit être configurée selon le réseau physique ou logique auquel elle est connectée.",
+            "Dans Net_Practice, une patte de routeur branchée à un switch doit être dans le même sous-réseau que les PC branchés sur ce switch.",
+            "Dire qu’un routeur est en 10.0.0.1 n’a pas de sens si on ne précise pas quelle interface porte cette adresse."
+          ],
+          "code": "R1 interface A: 192.168.1.1/24\nR1 interface B: 10.0.0.1/30\nMême routeur, deux réseaux différents.",
+          "warning": "Ne mets pas toutes les interfaces d’un routeur dans le même réseau par défaut.",
+          "tip": "Lis chaque câble ou segment comme une petite zone avec son propre sous-réseau."
+        },
+        {
+          "title": "3. IPv4 : 4 octets, 32 bits",
+          "body": [
+            "Une adresse IPv4 contient 32 bits, affichés sous forme de 4 octets décimaux.",
+            "Chaque octet va de 0 à 255 parce qu’un octet contient 8 bits.",
+            "Une IP comme 192.168.1.42 est donc une écriture lisible d’une valeur binaire.",
+            "Le masque sert à couper ces 32 bits en deux parties : la partie réseau et la partie hôte.",
+            "Deux adresses peuvent se ressembler visuellement mais être dans des réseaux différents si le masque change."
+          ],
+          "code": "192.168.1.42\n= 4 octets\n= 32 bits\n= réseau + hôte selon le masque",
+          "warning": "Comparer seulement les premiers octets est insuffisant. Le masque décide.",
+          "tip": "Demande toujours : quelle est l’IP et quel est le masque ? Les deux vont ensemble."
+        },
+        {
+          "title": "4. Les puissances de 2 à connaître",
+          "body": [
+            "Les calculs réseau reposent sur des puissances de 2.",
+            "Si un masque laisse 8 bits pour les hôtes, il y a 2^8 = 256 adresses.",
+            "Si un masque laisse 2 bits pour les hôtes, il y a 2^2 = 4 adresses.",
+            "Dans la plupart des sous-réseaux classiques, deux adresses sont réservées : réseau et broadcast.",
+            "Les hôtes utilisables valent donc souvent total - 2."
+          ],
+          "code": "2^1 = 2\n2^2 = 4\n2^3 = 8\n2^4 = 16\n2^5 = 32\n2^6 = 64\n2^7 = 128\n2^8 = 256",
+          "warning": "Un bloc de 64 adresses ne donne pas 64 machines utilisables, mais généralement 62.",
+          "tip": "Apprends 4, 8, 16, 32, 64, 128, 256 par coeur : ce sont les tailles de blocs les plus utiles."
+        },
+        {
+          "title": "5. CIDR /XX : lire le slash correctement",
+          "body": [
+            "Le slash indique combien de bits sont réservés au réseau.",
+            "Un /24 signifie 24 bits réseau et 8 bits hôte.",
+            "Un /30 signifie 30 bits réseau et 2 bits hôte.",
+            "Plus le slash est grand, moins il reste de bits hôte, donc plus le réseau est petit.",
+            "C’est l’inverse de l’intuition de beaucoup de débutants : /30 est minuscule, /8 est énorme."
+          ],
+          "code": "/24: 32 - 24 = 8 bits hôte -> 256 adresses\n/26: 32 - 26 = 6 bits hôte -> 64 adresses\n/30: 32 - 30 = 2 bits hôte -> 4 adresses",
+          "warning": "/30 ne veut pas dire 30 machines. Cela veut dire 30 bits réseau.",
+          "tip": "À chaque /XX, calcule 32 - XX pour connaître les bits hôte."
+        },
+        {
+          "title": "6. Table des masques courants",
+          "body": [
+            "Tu n’as pas besoin de convertir tout le binaire à chaque niveau si tu connais les masques fréquents.",
+            "Les niveaux Net_Practice utilisent surtout des masques classiques autour de /24 à /30.",
+            "La taille du bloc correspond au pas entre deux réseaux dans l’octet intéressant.",
+            "Par exemple, /26 a un pas de 64 : les réseaux commencent à .0, .64, .128 et .192.",
+            "Cette table permet de trouver très vite réseau, broadcast et plage utilisable."
+          ],
+          "code": "/24 = 255.255.255.0   | bloc 256 | 254 hôtes\n/25 = 255.255.255.128 | bloc 128 | 126 hôtes\n/26 = 255.255.255.192 | bloc 64  | 62 hôtes\n/27 = 255.255.255.224 | bloc 32  | 30 hôtes\n/28 = 255.255.255.240 | bloc 16  | 14 hôtes\n/29 = 255.255.255.248 | bloc 8   | 6 hôtes\n/30 = 255.255.255.252 | bloc 4   | 2 hôtes",
+          "warning": "Un masque comme 255.255.255.250 n’est pas un masque CIDR valide.",
+          "tip": "Retient surtout le pas : /25 pas 128, /26 pas 64, /27 pas 32, /28 pas 16, /29 pas 8, /30 pas 4."
+        },
+        {
+          "title": "7. Réseau, broadcast et plage utilisable",
+          "body": [
+            "L’adresse réseau est la première adresse du bloc.",
+            "L’adresse broadcast est la dernière adresse du bloc.",
+            "Les adresses entre les deux sont utilisables par les interfaces.",
+            "Une gateway est une interface comme une autre : elle doit recevoir une adresse utilisable.",
+            "Un PC, un routeur ou une gateway ne doivent pas utiliser l’adresse réseau ou broadcast."
+          ],
+          "code": "192.168.1.70/26\nBloc /26 = pas de 64\nIntervalle contenant 70: 64 à 127\nRéseau: 192.168.1.64\nUtilisables: 192.168.1.65 à 192.168.1.126\nBroadcast: 192.168.1.127",
+          "warning": "Mettre 192.168.1.64 ou 192.168.1.127 sur une interface est invalide dans cet exemple.",
+          "tip": "Quand tu trouves l’intervalle, barre mentalement la première et la dernière adresse."
+        },
+        {
+          "title": "8. Vérifier si deux IP sont dans le même réseau",
+          "body": [
+            "Deux interfaces peuvent parler directement seulement si elles appartiennent au même sous-réseau.",
+            "Pour le vérifier, calcule le réseau de chaque IP avec son masque.",
+            "Si le résultat réseau est identique, elles sont locales entre elles.",
+            "Si le résultat est différent, il faut passer par un routeur.",
+            "Dans Net_Practice, cette vérification est cruciale pour les PC et leur gateway."
+          ],
+          "code": "A: 192.168.1.70/26 -> réseau 192.168.1.64\nB: 192.168.1.100/26 -> réseau 192.168.1.64\nA et B sont dans le même réseau.\n\nC: 192.168.1.130/26 -> réseau 192.168.1.128\nA et C ne sont pas dans le même réseau.",
+          "warning": "192.168.1.70 et 192.168.1.130 commencent pareil, mais ne sont pas ensemble en /26.",
+          "tip": "Le même préfixe visuel ne suffit pas. Calcule le bloc."
+        },
+        {
+          "title": "9. La gateway : la porte de sortie locale",
+          "body": [
+            "Une gateway est l’adresse locale d’un routeur utilisée pour sortir du réseau.",
+            "Elle doit être joignable directement par le PC ou l’équipement qui l’utilise.",
+            "Cela veut dire que la gateway doit être dans le même sous-réseau que l’interface source.",
+            "La gateway n’est pas la destination finale, c’est le prochain saut.",
+            "Si la gateway est hors réseau local, le PC ne sait pas lui envoyer le paquet."
+          ],
+          "code": "PC: 10.0.1.42/24\nGateway valide: 10.0.1.1\nGateway invalide: 10.0.2.1\nDestination finale possible: 172.16.0.10",
+          "warning": "Ne mets pas l’adresse du serveur distant comme gateway.",
+          "tip": "La gateway d’un PC est presque toujours l’interface du routeur connectée au même switch ou segment."
+        },
+        {
+          "title": "10. PC, switch, routeur : rôles différents",
+          "body": [
+            "Un PC est un hôte final : il envoie ou reçoit des paquets.",
+            "Un switch relie des équipements dans le même réseau local, mais ne route pas entre réseaux.",
+            "Un routeur relie plusieurs réseaux et prend des décisions de routage.",
+            "Un switch n’a pas besoin d’être la gateway : il ne fait que connecter le segment.",
+            "Un routeur a besoin d’une interface correctement adressée dans chaque réseau qu’il relie."
+          ],
+          "code": "PC A -- switch -- PC B       -> même LAN\nPC A -- switch -- routeur    -> sortie du LAN\nrouteur -- routeur           -> lien entre réseaux",
+          "warning": "Ne demande pas à un switch de faire le travail d’un routeur.",
+          "tip": "Switch = même réseau. Routeur = passage entre réseaux."
+        },
+        {
+          "title": "11. Les routes : destination, masque, next hop",
+          "body": [
+            "Une route dit : pour joindre telle destination, envoie au prochain saut.",
+            "La destination est souvent un réseau entier, pas une IP unique.",
+            "Le next hop doit être une adresse joignable localement par le routeur qui possède la route.",
+            "Une route vers 192.168.10.0/24 couvre toutes les adresses de ce réseau.",
+            "Une route vers 0.0.0.0/0 est la route par défaut : elle couvre tout ce qui n’est pas plus spécifique."
+          ],
+          "code": "Destination: 192.168.10.0/24\nNext hop: 10.0.0.2\nSens: pour joindre 192.168.10.x, envoie à 10.0.0.2",
+          "warning": "Un next hop non joignable localement rend la route inutile.",
+          "tip": "Avant d’accepter une route, vérifie le réseau du next hop."
+        },
+        {
+          "title": "12. Route par défaut et route la plus spécifique",
+          "body": [
+            "La route par défaut 0.0.0.0/0 sert quand aucune route plus précise ne correspond.",
+            "Si une route /24 et une route /0 correspondent toutes les deux, la /24 gagne.",
+            "C’est le principe du plus long préfixe.",
+            "Dans Net_Practice, une route précise peut être nécessaire même si une route par défaut existe.",
+            "À l’inverse, une route par défaut bien placée peut éviter d’écrire plusieurs routes inutiles."
+          ],
+          "code": "Destination à joindre: 10.0.0.42\nRoute A: 10.0.0.0/24 via R1\nRoute B: 0.0.0.0/0 via R2\nRésultat: Route A gagne, car /24 est plus précis que /0.",
+          "warning": "Les routes ne sont pas choisies au hasard ni seulement dans l’ordre visuel.",
+          "tip": "Cherche la route qui contient la destination avec le slash le plus grand."
+        },
+        {
+          "title": "13. Le retour est obligatoire",
+          "body": [
+            "Un paquet aller peut atteindre la destination, mais la réponse peut se perdre.",
+            "Chaque routeur du chemin retour doit savoir comment rejoindre le réseau source.",
+            "Les niveaux Net_Practice piègent souvent sur ce point.",
+            "Quand tu règles un PC A vers un PC B, vérifie aussi PC B vers PC A.",
+            "La connectivité est toujours bidirectionnelle pour que le check réussisse."
+          ],
+          "code": "Aller: A -> R1 -> R2 -> B\nRetour nécessaire: B -> R2 -> R1 -> A\nSi R2 ne connaît pas le réseau de A, ça échoue.",
+          "warning": "Une gateway correcte sur le PC source ne garantit pas le retour.",
+          "tip": "Après chaque route ajoutée, demande : qui doit répondre et par où ?"
+        },
+        {
+          "title": "14. Plages privées et adresses spéciales",
+          "body": [
+            "Les adresses privées servent aux réseaux internes.",
+            "Les plages privées classiques sont 10.0.0.0/8, 172.16.0.0/12 et 192.168.0.0/16.",
+            "Toute adresse en 172.* n’est pas privée : seulement 172.16.*.* à 172.31.*.*.",
+            "0.0.0.0/0 représente toutes les destinations dans une route par défaut.",
+            "127.0.0.0/8 correspond au loopback local et ne sert pas à adresser un réseau Net_Practice classique."
+          ],
+          "code": "Privé:\n10.0.0.0 à 10.255.255.255\n172.16.0.0 à 172.31.255.255\n192.168.0.0 à 192.168.255.255\n\nRoute par défaut:\n0.0.0.0/0",
+          "warning": "172.15.0.1 ou 172.32.0.1 ne sont pas dans la plage privée 172.16/12.",
+          "tip": "Pour 172, retiens 16 à 31 inclus."
+        },
+        {
+          "title": "15. Chevauchements : le piège des masques trop larges",
+          "body": [
+            "Deux sous-réseaux se chevauchent quand une même adresse appartient aux deux plages.",
+            "Cela rend le routage ambigu : un équipement peut croire qu’une destination est locale alors qu’elle doit passer par un routeur.",
+            "Les masques trop larges sont souvent la cause.",
+            "Élargir un masque peut faire passer un check local mais casser le reste du niveau.",
+            "Chaque segment doit avoir une plage claire, distincte et assez petite."
+          ],
+          "code": "10.0.0.0/24 couvre 10.0.0.0 à 10.0.0.255\n10.0.0.128/25 couvre 10.0.0.128 à 10.0.0.255\nCes deux réseaux se chevauchent.",
+          "warning": "Ne corrige pas une gateway invalide en agrandissant le masque sans recalculer tout le plan.",
+          "tip": "Si deux segments partagent des adresses possibles, il y a probablement un chevauchement."
+        },
+        {
+          "title": "16. Méthode complète pour résoudre un niveau",
+          "body": [
+            "Commence par ignorer les routes et regarder seulement les câbles, switches, PC et interfaces.",
+            "Donne un nom mental à chaque segment : LAN A, lien R1-R2, LAN B, Internet simulé.",
+            "Pour chaque segment, choisis ou vérifie un sous-réseau sans chevauchement.",
+            "Place seulement des IP utilisables sur les interfaces.",
+            "Ajoute ensuite les gateways des PC, puis les routes des routeurs, puis vérifie le retour."
+          ],
+          "code": "Méthode:\n1. Segments physiques\n2. Sous-réseau de chaque segment\n3. IP utilisables\n4. Gateway locale des hosts\n5. Routes entre réseaux\n6. Route retour\n7. Check",
+          "warning": "Remplir les champs de haut en bas sans méthode rend les niveaux avancés beaucoup plus difficiles.",
+          "tip": "Quand tu bloques, reviens au premier champ invalide dans l’ordre IP -> masque -> gateway -> route."
+        }
+      ]
+    },
     "concepts": [
       {
         "title": "Préambule : comment raisonner dans Net_Practice",
