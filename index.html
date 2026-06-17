@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Sys & Net Admin - Recap</title>
+    <meta
+      name="description"
+      content="Notebook local de révision pour Born2beRoot, Net_Practice, Inception et l’outil net_practice."
+    >
+    <link rel="stylesheet" href="styles/main.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Aller au contenu</a>
+
+    <aside class="sidebar" aria-label="Navigation des sujets">
+      <div class="brand">
+        <p>Notebook</p>
+        <h1>Sys & Net Admin</h1>
+      </div>
+      <nav id="topic-nav" class="topic-nav" aria-label="Sujets"></nav>
+    </aside>
+
+    <main id="content" class="content" tabindex="-1">
+      <header class="hero">
+        <p class="eyebrow">Common Core</p>
+        <h2>Réviser l’admin système, le réseau et Docker sans chercher dans les sujets.</h2>
+        <p>
+          Fiches courtes, commandes utiles, erreurs fréquentes et réflexes de défense.
+        </p>
+      </header>
+
+      <section class="toolbar" aria-label="Recherche">
+        <label for="search-input">Recherche</label>
+        <input id="search-input" type="search" autocomplete="off" placeholder="ssh, gateway, docker, ufw...">
+        <button id="clear-search" type="button">Réinitialiser</button>
+      </section>
+
+      <section id="results-panel" class="results-panel" hidden>
+        <div class="section-title">
+          <h2>Résultats</h2>
+          <span id="results-count"></span>
+        </div>
+        <ul id="results-list" class="results-list"></ul>
+      </section>
+
+      <section id="topic-panel" class="topic-panel" aria-live="polite"></section>
+    </main>
+
+    <script src="data/topics.js"></script>
+    <script src="scripts/app.js"></script>
+  </body>
+</html>
