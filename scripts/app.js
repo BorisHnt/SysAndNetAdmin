@@ -8,6 +8,7 @@ const elements = {
   panel: document.querySelector("#topic-panel"),
   searchInput: document.querySelector("#search-input"),
   clearSearch: document.querySelector("#clear-search"),
+  readingToggle: document.querySelector("#reading-toggle"),
   resultsPanel: document.querySelector("#results-panel"),
   resultsList: document.querySelector("#results-list"),
   resultsCount: document.querySelector("#results-count"),
@@ -41,6 +42,14 @@ function renderTags(tags) {
       ${tags.map((tag) => `<li>${escapeHtml(tag)}</li>`).join("")}
     </ul>
   `;
+}
+
+function renderTextList(lines) {
+  if (!Array.isArray(lines) || lines.length === 0) {
+    return "";
+  }
+
+  return lines.map((line) => `<li data-reading>${escapeHtml(line)}</li>`).join("");
 }
 
 function renderNav() {
@@ -85,12 +94,12 @@ function renderTopic(topicId, conceptSlug = "") {
             <h3>${escapeHtml(concept.title)}</h3>
           </div>
           ${renderTags(concept.tags)}
-          ${concept.body.map((line) => `<p>${escapeHtml(line)}</p>`).join("")}
+          ${concept.body.map((line) => `<p data-reading>${escapeHtml(line)}</p>`).join("")}
           ${code}
           <h4>Erreur fréquente</h4>
-          <p class="mistake">${escapeHtml(concept.mistake)}</p>
+          <p class="mistake" data-reading>${escapeHtml(concept.mistake)}</p>
           <h4>Bon réflexe</h4>
-          <p class="tip">${escapeHtml(concept.tip)}</p>
+          <p class="tip" data-reading>${escapeHtml(concept.tip)}</p>
         </article>
       `;
     })
@@ -100,7 +109,7 @@ function renderTopic(topicId, conceptSlug = "") {
     <article class="topic-card">
       <p class="topic-kicker">${escapeHtml(topic.focus)}</p>
       <h2>${escapeHtml(topic.title)}</h2>
-      <p class="summary">${escapeHtml(topic.summary)}</p>
+      <p class="summary" data-reading>${escapeHtml(topic.summary)}</p>
       <ul class="meta-list" aria-label="Métadonnées">
         <li>${escapeHtml(topic.status)}</li>
         <li>${topic.concepts.length} notions</li>
@@ -110,7 +119,7 @@ function renderTopic(topicId, conceptSlug = "") {
         <div>
           <h3>Objectifs</h3>
           <ul>
-            ${topic.objectives.map((objective) => `<li>${escapeHtml(objective)}</li>`).join("")}
+            ${renderTextList(topic.objectives)}
           </ul>
         </div>
         <div>
@@ -123,6 +132,8 @@ function renderTopic(topicId, conceptSlug = "") {
       ${concepts}
     </article>
   `;
+
+  window.readingAssist.refresh(document);
 
   if (conceptSlug) {
     document.getElementById(conceptSlug)?.scrollIntoView({ block: "start" });
@@ -170,7 +181,8 @@ function search(query) {
   elements.resultsCount.textContent = `${results.length} résultat${results.length > 1 ? "s" : ""}`;
 
   if (results.length === 0) {
-    elements.resultsList.innerHTML = '<li class="empty-state">Aucun résultat. Essaie un mot plus court.</li>';
+    elements.resultsList.innerHTML = '<li class="empty-state" data-reading>Aucun résultat. Essaie un mot plus court.</li>';
+    window.readingAssist.refresh(document);
     return;
   }
 
@@ -183,12 +195,14 @@ function search(query) {
         <li>
           <button class="result-button" type="button" data-topic-id="${escapeHtml(topic.id)}" data-concept-id="${escapeHtml(targetId)}">
             <strong>${escapeHtml(concept.title)}</strong>
-            <span>${escapeHtml(topic.title)} - ${escapeHtml(excerpt)}</span>
+            <span data-reading>${escapeHtml(topic.title)} - ${escapeHtml(excerpt)}</span>
           </button>
         </li>
       `;
     })
     .join("");
+
+  window.readingAssist.refresh(document);
 }
 
 elements.nav.addEventListener("click", (event) => {
@@ -210,6 +224,12 @@ elements.clearSearch.addEventListener("click", () => {
   elements.searchInput.focus();
 });
 
+elements.readingToggle.addEventListener("click", () => {
+  const enabled = elements.readingToggle.getAttribute("aria-pressed") !== "true";
+  elements.readingToggle.setAttribute("aria-pressed", String(enabled));
+  window.readingAssist.setEnabled(enabled, document);
+});
+
 elements.resultsList.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-topic-id]");
   if (!button) {
@@ -220,3 +240,7 @@ elements.resultsList.addEventListener("click", (event) => {
 });
 
 renderTopic(state.topics[0]?.id || "");
+
+const readingEnabled = window.readingAssist.isEnabled();
+elements.readingToggle.setAttribute("aria-pressed", String(readingEnabled));
+window.readingAssist.setEnabled(readingEnabled, document);

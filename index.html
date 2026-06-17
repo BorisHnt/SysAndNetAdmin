@@ -30,7 +30,7 @@
       <header class="hero">
         <p class="eyebrow">Common Core</p>
         <h2>Système, réseau, Docker.</h2>
-        <p>
+        <p data-reading>
           Fiches courtes, commandes utiles, erreurs fréquentes et réflexes de défense.
         </p>
       </header>
@@ -38,6 +38,9 @@
       <section class="toolbar" aria-label="Recherche">
         <label for="search-input">Recherche</label>
         <input id="search-input" type="search" autocomplete="off" placeholder="ssh, gateway, docker, ufw...">
+        <button id="reading-toggle" class="toggle-button" type="button" aria-pressed="false">
+          Mode TDAH
+        </button>
         <button id="clear-search" type="button">Réinitialiser</button>
       </section>
 
@@ -53,6 +56,7 @@
     </main>
 
     <script src="data/topics.js"></script>
+    <script src="scripts/reading-mode.js"></script>
     <script src="scripts/app.js"></script>
   </body>
 </html>

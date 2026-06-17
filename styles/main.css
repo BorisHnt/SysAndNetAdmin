@@ -257,7 +257,7 @@ a:focus-visible {
 
 .toolbar {
   display: grid;
-  grid-template-columns: auto minmax(12rem, 1fr) auto;
+  grid-template-columns: auto minmax(12rem, 1fr) auto auto;
   gap: 0.8rem;
   align-items: center;
   margin-bottom: 1.4rem;
@@ -287,6 +287,12 @@ button {
 
 button:hover {
   border-color: var(--accent);
+}
+
+.toggle-button[aria-pressed="true"] {
+  border-color: var(--accent);
+  background: var(--accent);
+  color: white;
 }
 
 .topic-card {
@@ -471,6 +477,10 @@ code {
   background: var(--surface);
   padding: 1rem;
   color: var(--muted);
+}
+
+.assist-word strong {
+  font-weight: 800;
 }
 
 @media (max-width: 900px) {
