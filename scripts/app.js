@@ -191,6 +191,13 @@ function renderNetworkNode(node) {
     <div
       class="network-node network-node-${escapeHtml(node.type)}"
       style="left:${Number(node.x)}%; top:${Number(node.y)}%;"
+      data-node-id="${escapeHtml(node.id)}"
+      data-x="${Number(node.x)}"
+      data-y="${Number(node.y)}"
+      tabindex="0"
+      role="button"
+      aria-label="${escapeHtml(`${node.label}, ${displayName}. Déplaçable dans le schéma.`)}"
+      title="Déplacer cet élément"
     >
       <img src="assets/net-${escapeHtml(node.type)}.svg" alt="">
       <small>${escapeHtml(node.label)}</small>
@@ -219,7 +226,16 @@ function renderNetworkDiagram(level) {
             .map((link) => {
               const from = nodesById[link[0]];
               const to = nodesById[link[1]];
-              return `<line x1="${Number(from.x)}" y1="${Number(from.y)}" x2="${Number(to.x)}" y2="${Number(to.y)}"></line>`;
+              return `
+                <line
+                  data-from="${escapeHtml(link[0])}"
+                  data-to="${escapeHtml(link[1])}"
+                  x1="${Number(from.x)}"
+                  y1="${Number(from.y)}"
+                  x2="${Number(to.x)}"
+                  y2="${Number(to.y)}"
+                ></line>
+              `;
             })
             .join("")}
         </svg>
@@ -227,6 +243,186 @@ function renderNetworkDiagram(level) {
       </div>
     </div>
   `;
+}
+
+function setNetworkNodePosition(node, x, y) {
+  const diagram = node.closest(".network-diagram");
+  if (!diagram) {
+    return;
+  }
+
+  const halfWidth = (node.offsetWidth / 2 / diagram.clientWidth) * 100;
+  const halfHeight = (node.offsetHeight / 2 / diagram.clientHeight) * 100;
+  const safeX = Math.min(99 - halfWidth, Math.max(1 + halfWidth, x));
+  const safeY = Math.min(98 - halfHeight, Math.max(2 + halfHeight, y));
+
+  node.dataset.x = String(safeX);
+  node.dataset.y = String(safeY);
+  node.style.left = `${safeX}%`;
+  node.style.top = `${safeY}%`;
+}
+
+function updateNetworkCables(diagram) {
+  const nodes = Object.fromEntries(
+    [...diagram.querySelectorAll(".network-node")].map((node) => [node.dataset.nodeId, node]),
+  );
+
+  diagram.querySelectorAll(".network-cables line").forEach((line) => {
+    const from = nodes[line.dataset.from];
+    const to = nodes[line.dataset.to];
+
+    if (!from || !to) {
+      return;
+    }
+
+    line.setAttribute("x1", from.dataset.x);
+    line.setAttribute("y1", from.dataset.y);
+    line.setAttribute("x2", to.dataset.x);
+    line.setAttribute("y2", to.dataset.y);
+  });
+}
+
+function moveNetworkNodeByPixels(node, deltaX, deltaY) {
+  const diagram = node.closest(".network-diagram");
+  if (!diagram) {
+    return;
+  }
+
+  setNetworkNodePosition(
+    node,
+    Number(node.dataset.x) + (deltaX / diagram.clientWidth) * 100,
+    Number(node.dataset.y) + (deltaY / diagram.clientHeight) * 100,
+  );
+}
+
+function resolveNetworkOverlaps(diagram) {
+  const nodes = [...diagram.querySelectorAll(".network-node")];
+  const gap = 12;
+
+  for (let iteration = 0; iteration < 40; iteration += 1) {
+    let collisionFound = false;
+
+    for (let firstIndex = 0; firstIndex < nodes.length; firstIndex += 1) {
+      for (let secondIndex = firstIndex + 1; secondIndex < nodes.length; secondIndex += 1) {
+        const first = nodes[firstIndex];
+        const second = nodes[secondIndex];
+        const firstRect = first.getBoundingClientRect();
+        const secondRect = second.getBoundingClientRect();
+        const firstCenterX = firstRect.left + firstRect.width / 2;
+        const firstCenterY = firstRect.top + firstRect.height / 2;
+        const secondCenterX = secondRect.left + secondRect.width / 2;
+        const secondCenterY = secondRect.top + secondRect.height / 2;
+        const overlapX =
+          (firstRect.width + secondRect.width) / 2 + gap - Math.abs(firstCenterX - secondCenterX);
+        const overlapY =
+          (firstRect.height + secondRect.height) / 2 + gap - Math.abs(firstCenterY - secondCenterY);
+
+        if (overlapX <= 0 || overlapY <= 0) {
+          continue;
+        }
+
+        collisionFound = true;
+
+        if (overlapX < overlapY) {
+          const direction = firstCenterX <= secondCenterX ? -1 : 1;
+          moveNetworkNodeByPixels(first, direction * overlapX * 0.52, 0);
+          moveNetworkNodeByPixels(second, -direction * overlapX * 0.52, 0);
+        } else {
+          const direction = firstCenterY <= secondCenterY ? -1 : 1;
+          moveNetworkNodeByPixels(first, 0, direction * overlapY * 0.52);
+          moveNetworkNodeByPixels(second, 0, -direction * overlapY * 0.52);
+        }
+      }
+    }
+
+    if (!collisionFound) {
+      break;
+    }
+  }
+
+  updateNetworkCables(diagram);
+}
+
+function initializeNetworkDiagrams() {
+  document.querySelectorAll(".network-diagram").forEach((diagram) => {
+    if (diagram.dataset.interactive === "true") {
+      resolveNetworkOverlaps(diagram);
+      return;
+    }
+
+    diagram.dataset.interactive = "true";
+    const nodes = [...diagram.querySelectorAll(".network-node")];
+
+    if ("ResizeObserver" in window) {
+      const resizeObserver = new ResizeObserver(() => {
+        requestAnimationFrame(() => resolveNetworkOverlaps(diagram));
+      });
+      resizeObserver.observe(diagram);
+      diagram.networkResizeObserver = resizeObserver;
+    }
+
+    nodes.forEach((node) => {
+      node.addEventListener("pointerdown", (event) => {
+        if (event.button !== 0 && event.pointerType !== "touch") {
+          return;
+        }
+
+        event.preventDefault();
+        node.setPointerCapture(event.pointerId);
+        node.classList.add("is-dragging");
+        diagram.classList.add("is-dragging-node");
+
+        const startX = event.clientX;
+        const startY = event.clientY;
+        const initialX = Number(node.dataset.x);
+        const initialY = Number(node.dataset.y);
+
+        const onMove = (moveEvent) => {
+          const rect = diagram.getBoundingClientRect();
+          setNetworkNodePosition(
+            node,
+            initialX + ((moveEvent.clientX - startX) / rect.width) * 100,
+            initialY + ((moveEvent.clientY - startY) / rect.height) * 100,
+          );
+          updateNetworkCables(diagram);
+        };
+
+        const onEnd = () => {
+          node.classList.remove("is-dragging");
+          diagram.classList.remove("is-dragging-node");
+          node.removeEventListener("pointermove", onMove);
+          node.removeEventListener("pointerup", onEnd);
+          node.removeEventListener("pointercancel", onEnd);
+          resolveNetworkOverlaps(diagram);
+        };
+
+        node.addEventListener("pointermove", onMove);
+        node.addEventListener("pointerup", onEnd);
+        node.addEventListener("pointercancel", onEnd);
+      });
+
+      node.addEventListener("keydown", (event) => {
+        const movement = event.shiftKey ? 24 : 8;
+        const directions = {
+          ArrowLeft: [-movement, 0],
+          ArrowRight: [movement, 0],
+          ArrowUp: [0, -movement],
+          ArrowDown: [0, movement],
+        };
+        const direction = directions[event.key];
+
+        if (!direction) {
+          return;
+        }
+
+        event.preventDefault();
+        moveNetworkNodeByPixels(node, direction[0], direction[1]);
+        resolveNetworkOverlaps(diagram);
+      });
+    });
+
+    resolveNetworkOverlaps(diagram);
+  });
 }
 
 function renderDetailedExplanation(level) {
@@ -515,6 +711,11 @@ function renderTopic(topicId, conceptSlug = "") {
   `;
 
   window.readingAssist.refresh(document);
+  requestAnimationFrame(() => {
+    requestAnimationFrame(initializeNetworkDiagrams);
+  });
+
+  document.fonts?.ready.then(initializeNetworkDiagrams);
 
   if (conceptSlug) {
     document.getElementById(conceptSlug)?.scrollIntoView({ block: "start" });

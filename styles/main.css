@@ -808,6 +808,7 @@ code {
     var(--surface);
   background-size: 2rem 2rem;
   overflow: hidden;
+  user-select: none;
 }
 
 .network-node {
@@ -825,6 +826,29 @@ code {
   background: var(--surface);
   padding: 0.5rem 0.6rem;
   box-shadow: 0 3px 8px rgb(29 37 45 / 0.1);
+  cursor: grab;
+  touch-action: none;
+  transition:
+    box-shadow 120ms ease,
+    border-color 120ms ease;
+}
+
+.network-node:hover,
+.network-node:focus-visible {
+  z-index: 4;
+  border-color: var(--focus);
+  box-shadow: 0 7px 16px rgb(29 37 45 / 0.18);
+}
+
+.network-node.is-dragging {
+  z-index: 5;
+  cursor: grabbing;
+  border-color: var(--focus);
+  box-shadow: 0 10px 24px rgb(29 37 45 / 0.24);
+}
+
+.network-diagram.is-dragging-node {
+  cursor: grabbing;
 }
 
 .network-node img {
