@@ -354,7 +354,7 @@ function renderNetPracticeLevels(topicId) {
   }
 
   return `
-    <section class="level-guide" aria-label="Guide des dix niveaux Net Practice">
+    <section id="net-practice-levels-guide" class="level-guide" aria-label="Guide des dix niveaux Net Practice">
       <header class="level-guide-header">
         <p class="topic-kicker">Analyse des exercices</p>
         <h2>Les 10 niveaux, expliqués pas à pas</h2>
@@ -417,14 +417,32 @@ function renderNav() {
     .map((topic) => {
       const current = topic.id === state.activeId ? ' aria-current="page"' : "";
 
+      const levelShortcut =
+        topic.id === "net-practice"
+          ? `
+            <button
+              class="nav-subsection"
+              type="button"
+              data-topic-id="net-practice"
+              data-scroll-target="net-practice-levels-guide"
+            >
+              <span aria-hidden="true">↓</span>
+              <strong>Les 10 niveaux, expliqués pas à pas</strong>
+            </button>
+          `
+          : "";
+
       return `
-        <button type="button" data-topic-id="${escapeHtml(topic.id)}"${current}>
-          <span class="nav-number">${escapeHtml(topic.number)}</span>
-          <span class="nav-copy">
-            <strong>${escapeHtml(topic.shortTitle || topic.title)}</strong>
-            <span>${escapeHtml(topic.focus)}</span>
-          </span>
-        </button>
+        <div class="nav-group">
+          <button type="button" data-topic-id="${escapeHtml(topic.id)}"${current}>
+            <span class="nav-number">${escapeHtml(topic.number)}</span>
+            <span class="nav-copy">
+              <strong>${escapeHtml(topic.shortTitle || topic.title)}</strong>
+              <span>${escapeHtml(topic.focus)}</span>
+            </span>
+          </button>
+          ${levelShortcut}
+        </div>
       `;
     })
     .join("");
@@ -575,6 +593,12 @@ elements.nav.addEventListener("click", (event) => {
   }
 
   renderTopic(button.dataset.topicId);
+
+  if (button.dataset.scrollTarget) {
+    document
+      .getElementById(button.dataset.scrollTarget)
+      ?.scrollIntoView({ block: "start", behavior: "instant" });
+  }
 });
 
 elements.searchInput.addEventListener("input", (event) => {
