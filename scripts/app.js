@@ -185,13 +185,16 @@ function renderNetPracticeBasics(topicId) {
 }
 
 function renderNetworkNode(node) {
+  const displayName = node.name || node.label;
+
   return `
     <div
       class="network-node network-node-${escapeHtml(node.type)}"
       style="left:${Number(node.x)}%; top:${Number(node.y)}%;"
     >
       <img src="assets/net-${escapeHtml(node.type)}.svg" alt="">
-      <strong>${escapeHtml(node.label)}</strong>
+      <small>${escapeHtml(node.label)}</small>
+      <strong>${escapeHtml(displayName)}</strong>
       <span>${escapeHtml(node.detail)}</span>
     </div>
   `;
@@ -357,6 +360,12 @@ function renderNetPracticeLevels(topicId) {
         <h2>Les 10 niveaux, expliqués pas à pas</h2>
         <p data-reading>
           Chaque niveau commence par un exemple chiffré complet. Une fois le raisonnement compris, la partie technique montre comment l’adapter aux valeurs générées dans ton propre exercice.
+        </p>
+        <p class="diagram-naming-note" data-reading>
+          Dans les schémas, <strong>host A</strong> désigne la machine, <strong>A1</strong> son interface réseau et le nom comme <strong>webserv.non-real.com</strong> permet de la reconnaître à l’écran.
+        </p>
+        <p class="generated-values-note" data-reading>
+          <strong>Mode training :</strong> la forme du niveau reste la même. Les IP sont générées à partir du login, donc un même login retrouve les mêmes valeurs pour un même niveau. Avec un autre login, les nombres changent mais le raisonnement reste identique. En évaluation, les niveaux 6 à 10 et leurs valeurs sont tirés de manière variable.
         </p>
       </header>
       ${levels

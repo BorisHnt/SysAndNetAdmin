@@ -783,7 +783,7 @@ code {
   transform: translate(-50%, -50%);
   display: grid;
   grid-template-columns: 2.35rem minmax(5.2rem, auto);
-  grid-template-rows: auto auto;
+  grid-template-rows: auto auto auto;
   column-gap: 0.55rem;
   align-items: center;
   min-width: 9rem;
@@ -795,21 +795,44 @@ code {
 }
 
 .network-node img {
-  grid-row: 1 / 3;
+  grid-row: 1 / 4;
   width: 2.2rem;
   height: 2.2rem;
   color: var(--ink);
 }
 
+.network-node small {
+  color: var(--accent-dark);
+  font-size: 0.66rem;
+  font-weight: 800;
+  line-height: 1.15;
+  text-transform: uppercase;
+}
+
 .network-node strong {
   font-size: 0.86rem;
   line-height: 1.2;
+  overflow-wrap: anywhere;
 }
 
 .network-node span {
   color: var(--muted);
   font-size: 0.7rem;
   line-height: 1.2;
+}
+
+.diagram-naming-note {
+  margin-top: 0.75rem !important;
+  border-left: 4px solid var(--accent);
+  background: var(--accent-soft);
+  padding: 0.65rem 0.8rem;
+}
+
+.generated-values-note {
+  margin-top: 0.65rem !important;
+  border-left: 4px solid #6c5a9b;
+  background: #f7f5fb;
+  padding: 0.65rem 0.8rem;
 }
 
 .network-node-router {

@@ -6,10 +6,10 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 8",
       nodes: [
-        { id: "A", type: "pc", label: "PC A", detail: "IP à corriger", x: 28, y: 70 },
-        { id: "B", type: "pc", label: "PC B", detail: "/24 fixe", x: 28, y: 28 },
-        { id: "C", type: "pc", label: "PC C", detail: "/16 fixe", x: 72, y: 70 },
-        { id: "D", type: "pc", label: "PC D", detail: "IP à corriger", x: 72, y: 28 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "my PC", detail: "IP à corriger", x: 28, y: 70 },
+        { id: "B", type: "pc", label: "host B · interface B1", name: "little brother’s computer", detail: "/24 fixe", x: 28, y: 28 },
+        { id: "C", type: "pc", label: "host C · interface C1", name: "my Mac", detail: "/16 fixe", x: 72, y: 70 },
+        { id: "D", type: "pc", label: "host D · interface D1", name: "little sister’s computer", detail: "IP à corriger", x: 72, y: 28 }
       ],
       links: [["A", "B"], ["C", "D"]]
     },
@@ -55,10 +55,10 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 8",
       nodes: [
-        { id: "A", type: "pc", label: "PC A", detail: "/27", x: 28, y: 70 },
-        { id: "B", type: "pc", label: "PC B", detail: "masque à corriger", x: 28, y: 28 },
-        { id: "C", type: "pc", label: "PC C", detail: "/30", x: 72, y: 70 },
-        { id: "D", type: "pc", label: "PC D", detail: "/30", x: 72, y: 28 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "Computer A", detail: "/27", x: 28, y: 70 },
+        { id: "B", type: "pc", label: "host B · interface B1", name: "Computer B", detail: "masque à corriger", x: 28, y: 28 },
+        { id: "C", type: "pc", label: "host C · interface C1", name: "Computer C", detail: "/30", x: 72, y: 70 },
+        { id: "D", type: "pc", label: "host D · interface D1", name: "Computer D", detail: "/30", x: 72, y: 28 }
       ],
       links: [["A", "B"], ["C", "D"]]
     },
@@ -102,10 +102,10 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 9",
       nodes: [
-        { id: "A", type: "pc", label: "PC A", detail: "IP fixe", x: 72, y: 76 },
-        { id: "B", type: "pc", label: "PC B", detail: "IP + masque", x: 72, y: 22 },
-        { id: "C", type: "pc", label: "PC C", detail: "/25 fixe", x: 24, y: 52 },
-        { id: "S", type: "switch", label: "Switch", detail: "LAN partagé", x: 53, y: 50 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "Host_A", detail: "IP fixe", x: 72, y: 76 },
+        { id: "B", type: "pc", label: "host B · interface B1", name: "Host_B", detail: "IP + masque", x: 72, y: 22 },
+        { id: "C", type: "pc", label: "host C · interface C1", name: "Host_C", detail: "/25 fixe", x: 24, y: 52 },
+        { id: "S", type: "switch", label: "switch S · interface S1", name: "Switch_1", detail: "LAN partagé", x: 53, y: 50 }
       ],
       links: [["S", "A"], ["S", "B"], ["S", "C"]]
     },
@@ -151,10 +151,10 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 9",
       nodes: [
-        { id: "A", type: "pc", label: "PC A", detail: ".132 fixe", x: 78, y: 76 },
-        { id: "B", type: "pc", label: "PC B", detail: "à configurer", x: 72, y: 22 },
-        { id: "S", type: "switch", label: "Switch", detail: "LAN", x: 56, y: 50 },
-        { id: "R", type: "router", label: "Routeur R1", detail: "interface LAN", x: 25, y: 50 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "A nice host", detail: ".132 fixe", x: 78, y: 76 },
+        { id: "B", type: "pc", label: "host B · interface B1", name: "Another host", detail: "à configurer", x: 72, y: 22 },
+        { id: "S", type: "switch", label: "switch S · interface S1", name: "Switch-1", detail: "LAN", x: 56, y: 50 },
+        { id: "R", type: "router", label: "router R · interfaces R1/R2/R3", name: "My_Gate", detail: "carrefour des réseaux", x: 25, y: 50 }
       ],
       links: [["R", "S"], ["S", "A"], ["S", "B"]]
     },
@@ -200,9 +200,9 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 9",
       nodes: [
-        { id: "A", type: "pc", label: "Machine A", detail: "LAN A", x: 78, y: 76 },
-        { id: "B", type: "pc", label: "Machine B", detail: "LAN B", x: 72, y: 22 },
-        { id: "R", type: "router", label: "Routeur", detail: "R1 / R2", x: 35, y: 50 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "Machine A", detail: "LAN A", x: 78, y: 76 },
+        { id: "B", type: "pc", label: "host B · interface B1", name: "Machine B", detail: "LAN B", x: 72, y: 22 },
+        { id: "R", type: "router", label: "router R · interfaces R1/R2", name: "The Mighty Router", detail: "relie les deux LAN", x: 35, y: 50 }
       ],
       links: [["R", "A"], ["R", "B"]]
     },
@@ -245,10 +245,10 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 9",
       nodes: [
-        { id: "I", type: "internet", label: "Internet", detail: "destination extérieure", x: 18, y: 24 },
-        { id: "R", type: "router", label: "Routeur", detail: "LAN + WAN", x: 42, y: 52 },
-        { id: "S", type: "switch", label: "Switch", detail: "LAN interne", x: 68, y: 52 },
-        { id: "A", type: "pc", label: "Serveur A", detail: "réseau interne", x: 82, y: 78 }
+        { id: "I", type: "internet", label: "Internet I · interface I1", name: "Internet", detail: "destination extérieure", x: 18, y: 24 },
+        { id: "R", type: "router", label: "router R · interfaces R1/R2", name: "gate.non-real.com", detail: "R1 LAN · R2 Internet", x: 42, y: 52 },
+        { id: "S", type: "switch", label: "switch S · interface S1", name: "sw-1.non-real.com", detail: "LAN interne", x: 68, y: 52 },
+        { id: "A", type: "pc", label: "host A · interface A1", name: "webserv.non-real.com", detail: "serveur du LAN", x: 82, y: 78 }
       ],
       links: [["I", "R"], ["R", "S"], ["S", "A"]]
     },
@@ -293,10 +293,10 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 9",
       nodes: [
-        { id: "A", type: "pc", label: "PC A", detail: "LAN gauche", x: 80, y: 22 },
-        { id: "R1", type: "router", label: "Routeur R1", detail: "tech", x: 38, y: 25 },
-        { id: "R2", type: "router", label: "Routeur R2", detail: "administration", x: 38, y: 72 },
-        { id: "C", type: "pc", label: "PC C", detail: "LAN droit", x: 80, y: 75 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "dev.non-real.net", detail: "LAN développement", x: 80, y: 22 },
+        { id: "R1", type: "router", label: "router R1 · interfaces R11/R12", name: "tech.non-real.net", detail: "routeur technique", x: 38, y: 25 },
+        { id: "R2", type: "router", label: "router R2 · interfaces R21/R22", name: "adm.non-real.net", detail: "routeur administration", x: 38, y: 72 },
+        { id: "C", type: "pc", label: "host C · interface C1", name: "accounting.non-real.net", detail: "LAN comptabilité", x: 80, y: 75 }
       ],
       links: [["A", "R1"], ["R1", "R2"], ["R2", "C"]]
     },
@@ -340,11 +340,11 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 10",
       nodes: [
-        { id: "I", type: "internet", label: "Internet", detail: "route agrégée", x: 82, y: 18 },
-        { id: "R1", type: "router", label: "R1", detail: "bordure", x: 48, y: 22 },
-        { id: "R2", type: "router", label: "R2", detail: "transit", x: 48, y: 58 },
-        { id: "C", type: "pc", label: "PC C", detail: "sous-réseau 1", x: 75, y: 82 },
-        { id: "D", type: "pc", label: "PC D", detail: "sous-réseau 2", x: 20, y: 82 }
+        { id: "I", type: "internet", label: "Internet I · interface I1", name: "Internet", detail: "route agrégée", x: 82, y: 18 },
+        { id: "R1", type: "router", label: "router R1 · interfaces R12/R13", name: "gate.non-real.com", detail: "routeur de bordure", x: 48, y: 22 },
+        { id: "R2", type: "router", label: "router R2 · interfaces R21/R22/R23", name: "transit.my-isp.org", detail: "routeur de transit", x: 48, y: 58 },
+        { id: "C", type: "pc", label: "host C · interface C1", name: "office.non-real.com", detail: "réseau bureau", x: 75, y: 82 },
+        { id: "D", type: "pc", label: "host D · interface D1", name: "home.non-real.com", detail: "réseau domicile", x: 20, y: 82 }
       ],
       links: [["I", "R1"], ["R1", "R2"], ["R2", "C"], ["R2", "D"]]
     },
@@ -393,14 +393,14 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 12",
       nodes: [
-        { id: "A", type: "pc", label: "PC A", detail: "LAN switché", x: 14, y: 68 },
-        { id: "B", type: "pc", label: "PC B", detail: "LAN switché", x: 14, y: 24 },
-        { id: "S", type: "switch", label: "Switch", detail: "A + B", x: 33, y: 46 },
-        { id: "R1", type: "router", label: "R1", detail: "bordure", x: 53, y: 38 },
-        { id: "I", type: "internet", label: "Internet", detail: "routes retour", x: 78, y: 16 },
-        { id: "R2", type: "router", label: "R2", detail: "distribution", x: 53, y: 72 },
-        { id: "C", type: "pc", label: "PC C", detail: "LAN C", x: 82, y: 65 },
-        { id: "D", type: "pc", label: "PC D", detail: "LAN D", x: 72, y: 90 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "meson", detail: "LAN switché", x: 14, y: 68 },
+        { id: "B", type: "pc", label: "host B · interface B1", name: "ion", detail: "LAN switché", x: 14, y: 24 },
+        { id: "S", type: "switch", label: "switch S · interface S1", name: "neutron", detail: "relie A et B", x: 33, y: 46 },
+        { id: "R1", type: "router", label: "router R1 · interfaces R11/R12/R13", name: "proton", detail: "routeur de bordure", x: 53, y: 38 },
+        { id: "I", type: "internet", label: "Internet I · interface I1", name: "Internet", detail: "routes de retour", x: 78, y: 16 },
+        { id: "R2", type: "router", label: "router R2 · interfaces R21/R22/R23", name: "boson", detail: "routeur de distribution", x: 53, y: 72 },
+        { id: "C", type: "pc", label: "host C · interface C1", name: "cation", detail: "LAN C", x: 82, y: 65 },
+        { id: "D", type: "pc", label: "host D · interface D1", name: "gluon", detail: "LAN D", x: 72, y: 90 }
       ],
       links: [["A", "S"], ["B", "S"], ["S", "R1"], ["R1", "I"], ["R1", "R2"], ["R2", "C"], ["R2", "D"]]
     },
@@ -457,14 +457,14 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 12",
       nodes: [
-        { id: "H1", type: "pc", label: "H1", detail: "LAN switché", x: 82, y: 62 },
-        { id: "H2", type: "pc", label: "H2", detail: "LAN switché", x: 82, y: 22 },
-        { id: "S1", type: "switch", label: "Switch", detail: "H1 + H2", x: 65, y: 42 },
-        { id: "R1", type: "router", label: "R1", detail: "bordure", x: 42, y: 46 },
-        { id: "I", type: "internet", label: "Internet", detail: "agrégat /24", x: 16, y: 20 },
-        { id: "R2", type: "router", label: "R2", detail: "distribution", x: 42, y: 75 },
-        { id: "H3", type: "pc", label: "H3", detail: "LAN dédié", x: 72, y: 84 },
-        { id: "H4", type: "pc", label: "H4", detail: "LAN /26 fixe", x: 18, y: 88 }
+        { id: "H1", type: "pc", label: "host H1 · interface H11", name: "Host one", detail: "LAN switché", x: 82, y: 62 },
+        { id: "H2", type: "pc", label: "host H2 · interface H21", name: "Host two", detail: "LAN switché", x: 82, y: 22 },
+        { id: "S1", type: "switch", label: "switch S1 · interface S11", name: "Switch one", detail: "relie H1 et H2", x: 65, y: 42 },
+        { id: "R1", type: "router", label: "router R1 · interfaces R11/R12/R13", name: "Router one", detail: "routeur de bordure", x: 42, y: 46 },
+        { id: "I", type: "internet", label: "Internet I · interface I1", name: "Internet", detail: "agrégat /24", x: 16, y: 20 },
+        { id: "R2", type: "router", label: "router R2 · interfaces R21/R22/R23", name: "Router two", detail: "routeur de distribution", x: 42, y: 75 },
+        { id: "H3", type: "pc", label: "host H3 · interface H31", name: "Host three", detail: "LAN dédié", x: 72, y: 84 },
+        { id: "H4", type: "pc", label: "host H4 · interface H41", name: "Host four", detail: "LAN /26 fixe", x: 18, y: 88 }
       ],
       links: [["H1", "S1"], ["H2", "S1"], ["S1", "R1"], ["I", "R1"], ["R1", "R2"], ["R2", "H3"], ["R2", "H4"]]
     },
