@@ -98,6 +98,91 @@ function renderPreamble(preamble) {
   `;
 }
 
+function renderNetworkNode(node) {
+  return `
+    <div class="network-node network-node-${escapeHtml(node.type)}">
+      <img src="assets/net-${escapeHtml(node.type)}.svg" alt="">
+      <strong>${escapeHtml(node.label)}</strong>
+      <span>${escapeHtml(node.detail)}</span>
+    </div>
+  `;
+}
+
+function renderNetworkPath(path) {
+  return `
+    <div class="network-path">
+      ${path
+        .map((node, index) => {
+          const connector = index < path.length - 1
+            ? '<span class="network-link" aria-hidden="true"></span>'
+            : "";
+          return `${renderNetworkNode(node)}${connector}`;
+        })
+        .join("")}
+    </div>
+  `;
+}
+
+function renderNetPracticeLevels(topicId) {
+  const levels = window.NET_PRACTICE_LEVELS || [];
+
+  if (topicId !== "net-practice" || levels.length === 0) {
+    return "";
+  }
+
+  return `
+    <section class="level-guide" aria-label="Guide des dix niveaux Net Practice">
+      <header class="level-guide-header">
+        <p class="topic-kicker">Analyse des exercices</p>
+        <h2>Les 10 niveaux, expliqués pas à pas</h2>
+        <p data-reading>
+          Les valeurs exactes changent selon le login. Les lettres comme A, B, C ou P, Q, R représentent donc les octets générés dans ton niveau. La méthode reste identique.
+        </p>
+      </header>
+      ${levels
+        .map(
+          (level) => `
+            <article class="level-card" id="net-practice-level-${escapeHtml(level.number)}">
+              <div class="level-title">
+                <span>${escapeHtml(level.number)}</span>
+                <div>
+                  <p>${escapeHtml(level.focus)}</p>
+                  <h3>${escapeHtml(level.title)}</h3>
+                </div>
+              </div>
+              <div class="network-diagram" aria-label="Schéma simplifié du niveau ${escapeHtml(level.number)}">
+                ${level.topology.map(renderNetworkPath).join("")}
+              </div>
+              <div class="level-columns">
+                <section>
+                  <h4>Ce que le niveau enseigne</h4>
+                  <ul>${renderTextList(level.principle)}</ul>
+                </section>
+                <section>
+                  <h4>Méthode de résolution</h4>
+                  <ol>${renderTextList(level.method)}</ol>
+                </section>
+              </div>
+              <h4>Exemple transposable</h4>
+              <pre><code>${escapeHtml(level.example)}</code></pre>
+              <div class="level-columns">
+                <section class="level-success">
+                  <h4>Pourquoi cela fonctionne</h4>
+                  <ul>${renderTextList(level.why)}</ul>
+                </section>
+                <section class="level-traps">
+                  <h4>Pièges du niveau</h4>
+                  <ul>${renderTextList(level.traps)}</ul>
+                </section>
+              </div>
+            </article>
+          `,
+        )
+        .join("")}
+    </section>
+  `;
+}
+
 function renderNav() {
   elements.nav.innerHTML = state.topics
     .map((topic) => {
@@ -177,6 +262,7 @@ function renderTopic(topicId, conceptSlug = "") {
         </div>
       </section>
       ${concepts}
+      ${renderNetPracticeLevels(topic.id)}
     </article>
   `;
 
