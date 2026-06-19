@@ -3,6 +3,16 @@ window.NET_PRACTICE_LEVELS = [
     number: "01",
     title: "Deux réseaux directs",
     focus: "Reconnaître un même sous-réseau",
+    diagram: {
+      ratio: "16 / 8",
+      nodes: [
+        { id: "A", type: "pc", label: "PC A", detail: "IP à corriger", x: 28, y: 70 },
+        { id: "B", type: "pc", label: "PC B", detail: "/24 fixe", x: 28, y: 28 },
+        { id: "C", type: "pc", label: "PC C", detail: "/16 fixe", x: 72, y: 70 },
+        { id: "D", type: "pc", label: "PC D", detail: "IP à corriger", x: 72, y: 28 }
+      ],
+      links: [["A", "B"], ["C", "D"]]
+    },
     topology: [
       [
         { type: "pc", label: "PC A", detail: "IP à corriger" },
@@ -42,6 +52,16 @@ window.NET_PRACTICE_LEVELS = [
     number: "02",
     title: "Blocs /27 et liens /30",
     focus: "Calculer une plage précise",
+    diagram: {
+      ratio: "16 / 8",
+      nodes: [
+        { id: "A", type: "pc", label: "PC A", detail: "/27", x: 28, y: 70 },
+        { id: "B", type: "pc", label: "PC B", detail: "masque à corriger", x: 28, y: 28 },
+        { id: "C", type: "pc", label: "PC C", detail: "/30", x: 72, y: 70 },
+        { id: "D", type: "pc", label: "PC D", detail: "/30", x: 72, y: 28 }
+      ],
+      links: [["A", "B"], ["C", "D"]]
+    },
     topology: [
       [
         { type: "pc", label: "PC A", detail: "/27" },
@@ -79,6 +99,16 @@ window.NET_PRACTICE_LEVELS = [
     number: "03",
     title: "Trois machines sur un switch",
     focus: "Un seul LAN partagé",
+    diagram: {
+      ratio: "16 / 9",
+      nodes: [
+        { id: "A", type: "pc", label: "PC A", detail: "IP fixe", x: 72, y: 76 },
+        { id: "B", type: "pc", label: "PC B", detail: "IP + masque", x: 72, y: 22 },
+        { id: "C", type: "pc", label: "PC C", detail: "/25 fixe", x: 24, y: 52 },
+        { id: "S", type: "switch", label: "Switch", detail: "LAN partagé", x: 53, y: 50 }
+      ],
+      links: [["S", "A"], ["S", "B"], ["S", "C"]]
+    },
     topology: [
       [
         { type: "pc", label: "PC A", detail: "IP fixe" },
@@ -118,6 +148,16 @@ window.NET_PRACTICE_LEVELS = [
     number: "04",
     title: "LAN avec une interface de routeur",
     focus: "Choisir un sous-réseau sans chevauchement",
+    diagram: {
+      ratio: "16 / 9",
+      nodes: [
+        { id: "A", type: "pc", label: "PC A", detail: ".132 fixe", x: 78, y: 76 },
+        { id: "B", type: "pc", label: "PC B", detail: "à configurer", x: 72, y: 22 },
+        { id: "S", type: "switch", label: "Switch", detail: "LAN", x: 56, y: 50 },
+        { id: "R", type: "router", label: "Routeur R1", detail: "interface LAN", x: 25, y: 50 }
+      ],
+      links: [["R", "S"], ["S", "A"], ["S", "B"]]
+    },
     topology: [
       [
         { type: "pc", label: "PC A", detail: ".132 fixe" },
@@ -157,6 +197,15 @@ window.NET_PRACTICE_LEVELS = [
     number: "05",
     title: "Deux LAN reliés par un routeur",
     focus: "Configurer les gateways des hôtes",
+    diagram: {
+      ratio: "16 / 9",
+      nodes: [
+        { id: "A", type: "pc", label: "Machine A", detail: "LAN A", x: 78, y: 76 },
+        { id: "B", type: "pc", label: "Machine B", detail: "LAN B", x: 72, y: 22 },
+        { id: "R", type: "router", label: "Routeur", detail: "R1 / R2", x: 35, y: 50 }
+      ],
+      links: [["R", "A"], ["R", "B"]]
+    },
     topology: [
       [
         { type: "pc", label: "Machine A", detail: "LAN A" },
@@ -193,6 +242,16 @@ window.NET_PRACTICE_LEVELS = [
     number: "06",
     title: "Sortir vers Internet",
     focus: "Route par défaut et route de retour",
+    diagram: {
+      ratio: "16 / 9",
+      nodes: [
+        { id: "I", type: "internet", label: "Internet", detail: "8.8.8.8", x: 18, y: 24 },
+        { id: "R", type: "router", label: "Routeur", detail: "LAN + WAN", x: 42, y: 52 },
+        { id: "S", type: "switch", label: "Switch", detail: "LAN interne", x: 68, y: 52 },
+        { id: "A", type: "pc", label: "Serveur A", detail: "réseau interne", x: 82, y: 78 }
+      ],
+      links: [["I", "R"], ["R", "S"], ["S", "A"]]
+    },
     topology: [
       [
         { type: "pc", label: "Serveur A", detail: "LAN interne" },
@@ -231,6 +290,16 @@ window.NET_PRACTICE_LEVELS = [
     number: "07",
     title: "Deux routeurs en chaîne",
     focus: "Trois sous-réseaux et quatre gateways",
+    diagram: {
+      ratio: "16 / 9",
+      nodes: [
+        { id: "A", type: "pc", label: "PC A", detail: "LAN gauche", x: 80, y: 22 },
+        { id: "R1", type: "router", label: "Routeur R1", detail: "tech", x: 38, y: 25 },
+        { id: "R2", type: "router", label: "Routeur R2", detail: "administration", x: 38, y: 72 },
+        { id: "C", type: "pc", label: "PC C", detail: "LAN droit", x: 80, y: 75 }
+      ],
+      links: [["A", "R1"], ["R1", "R2"], ["R2", "C"]]
+    },
     topology: [
       [
         { type: "pc", label: "PC A", detail: "LAN gauche" },
@@ -268,6 +337,17 @@ window.NET_PRACTICE_LEVELS = [
     number: "08",
     title: "VLSM et agrégation vers Internet",
     focus: "Découper un /26 en plusieurs réseaux",
+    diagram: {
+      ratio: "16 / 10",
+      nodes: [
+        { id: "I", type: "internet", label: "Internet", detail: "route agrégée", x: 82, y: 18 },
+        { id: "R1", type: "router", label: "R1", detail: "bordure", x: 48, y: 22 },
+        { id: "R2", type: "router", label: "R2", detail: "transit", x: 48, y: 58 },
+        { id: "C", type: "pc", label: "PC C", detail: "sous-réseau 1", x: 75, y: 82 },
+        { id: "D", type: "pc", label: "PC D", detail: "sous-réseau 2", x: 20, y: 82 }
+      ],
+      links: [["I", "R1"], ["R1", "R2"], ["R2", "C"], ["R2", "D"]]
+    },
     topology: [
       [
         { type: "internet", label: "Internet", detail: "route agrégée" },
@@ -310,6 +390,20 @@ window.NET_PRACTICE_LEVELS = [
     number: "09",
     title: "Routes spécifiques et ordre de lecture",
     focus: "Plusieurs LAN et routes de retour Internet",
+    diagram: {
+      ratio: "16 / 12",
+      nodes: [
+        { id: "A", type: "pc", label: "PC A", detail: "LAN switché", x: 14, y: 68 },
+        { id: "B", type: "pc", label: "PC B", detail: "LAN switché", x: 14, y: 24 },
+        { id: "S", type: "switch", label: "Switch", detail: "A + B", x: 33, y: 46 },
+        { id: "R1", type: "router", label: "R1", detail: "bordure", x: 53, y: 38 },
+        { id: "I", type: "internet", label: "Internet", detail: "routes retour", x: 78, y: 16 },
+        { id: "R2", type: "router", label: "R2", detail: "distribution", x: 53, y: 72 },
+        { id: "C", type: "pc", label: "PC C", detail: "LAN C", x: 82, y: 65 },
+        { id: "D", type: "pc", label: "PC D", detail: "LAN D", x: 72, y: 90 }
+      ],
+      links: [["A", "S"], ["B", "S"], ["S", "R1"], ["R1", "I"], ["R1", "R2"], ["R2", "C"], ["R2", "D"]]
+    },
     topology: [
       [
         { type: "pc", label: "PC A", detail: "LAN switché" },
@@ -360,6 +454,20 @@ window.NET_PRACTICE_LEVELS = [
     number: "10",
     title: "Synthèse complète",
     focus: "Plan d’adressage hiérarchique dans un /24",
+    diagram: {
+      ratio: "16 / 12",
+      nodes: [
+        { id: "H1", type: "pc", label: "H1", detail: "LAN switché", x: 82, y: 62 },
+        { id: "H2", type: "pc", label: "H2", detail: "LAN switché", x: 82, y: 22 },
+        { id: "S1", type: "switch", label: "Switch", detail: "H1 + H2", x: 65, y: 42 },
+        { id: "R1", type: "router", label: "R1", detail: "bordure", x: 42, y: 46 },
+        { id: "I", type: "internet", label: "Internet", detail: "agrégat /24", x: 16, y: 20 },
+        { id: "R2", type: "router", label: "R2", detail: "distribution", x: 42, y: 75 },
+        { id: "H3", type: "pc", label: "H3", detail: "LAN dédié", x: 72, y: 84 },
+        { id: "H4", type: "pc", label: "H4", detail: "LAN /26 fixe", x: 18, y: 88 }
+      ],
+      links: [["H1", "S1"], ["H2", "S1"], ["S1", "R1"], ["I", "R1"], ["R1", "R2"], ["R2", "H3"], ["R2", "H4"]]
+    },
     topology: [
       [
         { type: "pc", label: "H1", detail: "LAN switché" },

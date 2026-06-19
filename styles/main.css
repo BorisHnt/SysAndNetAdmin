@@ -617,38 +617,46 @@ code {
   line-height: 1.2;
 }
 
-.network-diagram {
-  display: grid;
-  gap: 0.7rem;
+.network-diagram-scroll {
   margin: 1.2rem 0;
-  border: 1px solid var(--line);
-  background: var(--surface);
-  padding: 1rem;
+  overflow-x: auto;
 }
 
-.network-path {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: max-content;
+.network-diagram {
+  position: relative;
+  min-width: 42rem;
+  aspect-ratio: var(--diagram-ratio);
+  border: 1px solid var(--line);
+  background:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px),
+    var(--surface);
+  background-size: 2rem 2rem;
+  overflow: hidden;
 }
 
 .network-node {
+  position: absolute;
+  z-index: 2;
+  transform: translate(-50%, -50%);
   display: grid;
-  grid-template-columns: 2.15rem minmax(5rem, auto);
+  grid-template-columns: 2.35rem minmax(5.2rem, auto);
   grid-template-rows: auto auto;
   column-gap: 0.55rem;
   align-items: center;
-  min-width: 8.5rem;
-  border: 1px solid var(--line);
-  background: var(--surface-muted);
-  padding: 0.55rem;
+  min-width: 9rem;
+  border: 2px solid var(--line-strong);
+  border-radius: 4px;
+  background: var(--surface);
+  padding: 0.5rem 0.6rem;
+  box-shadow: 0 3px 8px rgb(29 37 45 / 0.1);
 }
 
 .network-node img {
   grid-row: 1 / 3;
-  width: 2rem;
-  height: 2rem;
+  width: 2.2rem;
+  height: 2.2rem;
+  color: var(--ink);
 }
 
 .network-node strong {
@@ -664,16 +672,30 @@ code {
 
 .network-node-router {
   border-color: var(--accent);
+  background: #edf6f3;
 }
 
 .network-node-internet {
   border-color: var(--warning);
+  background: #fff7e6;
 }
 
-.network-link {
-  width: clamp(1.3rem, 4vw, 3.4rem);
-  height: 3px;
-  background: var(--line-strong);
+.network-node-switch {
+  background: #f5f1e8;
+}
+
+.network-cables {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.network-cables line {
+  vector-effect: non-scaling-stroke;
+  stroke: #65717a;
+  stroke-width: 3;
+  stroke-linecap: round;
 }
 
 .level-columns {
@@ -715,6 +737,112 @@ code {
   margin-bottom: 0.35rem;
 }
 
+.level-deep-dive {
+  margin-top: 1.35rem;
+  border-top: 2px solid var(--accent);
+  background: var(--surface);
+  padding: 1.2rem;
+}
+
+.level-deep-dive > header {
+  max-width: 78ch;
+  margin-bottom: 1.2rem;
+}
+
+.level-deep-dive > header > p:first-child {
+  margin: 0 0 0.2rem;
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.level-deep-dive > header h4 {
+  margin: 0 0 0.5rem;
+  font-size: 1.28rem;
+  line-height: 1.25;
+}
+
+.level-deep-dive > header p {
+  margin: 0.3rem 0;
+}
+
+.observation-panel,
+.packet-panel,
+.verification-panel,
+.calculation-panel {
+  margin-top: 1rem;
+  border-left: 4px solid var(--note-line, #39708d);
+  background: #f7fafb;
+  padding: 0.9rem 1rem;
+}
+
+.calculation-panel {
+  border-left-color: var(--accent);
+  background: #f5faf8;
+}
+
+.packet-panel {
+  border-left-color: #6c5a9b;
+  background: #f7f5fb;
+}
+
+.verification-panel {
+  border-left-color: var(--warning);
+  background: #fffaf0;
+}
+
+.level-deep-dive h4 {
+  margin: 0 0 0.55rem;
+  color: var(--accent-dark);
+  font-size: 0.95rem;
+}
+
+.level-deep-dive ul,
+.level-deep-dive ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.level-deep-dive li {
+  margin-bottom: 0.45rem;
+}
+
+.calculation-step {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.7rem;
+  margin-top: 0.85rem;
+}
+
+.calculation-step > span {
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  border-radius: 50%;
+  background: var(--accent);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.calculation-step h5 {
+  margin: 0 0 0.3rem;
+  font-size: 0.95rem;
+}
+
+.calculation-step p,
+.packet-panel p {
+  max-width: 78ch;
+  margin: 0.3rem 0;
+}
+
+.calculation-step pre,
+.packet-panel pre {
+  margin-top: 0.6rem;
+}
+
 @media (max-width: 900px) {
   .sidebar {
     position: sticky;
@@ -754,13 +882,6 @@ code {
     border-right: 0;
   }
 
-  .network-diagram {
-    overflow-x: auto;
-  }
-
-  .network-path {
-    justify-content: flex-start;
-  }
 }
 
 @media (prefers-reduced-motion: reduce) {

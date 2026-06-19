@@ -100,7 +100,10 @@ function renderPreamble(preamble) {
 
 function renderNetworkNode(node) {
   return `
-    <div class="network-node network-node-${escapeHtml(node.type)}">
+    <div
+      class="network-node network-node-${escapeHtml(node.type)}"
+      style="left:${Number(node.x)}%; top:${Number(node.y)}%;"
+    >
       <img src="assets/net-${escapeHtml(node.type)}.svg" alt="">
       <strong>${escapeHtml(node.label)}</strong>
       <span>${escapeHtml(node.detail)}</span>
@@ -108,18 +111,82 @@ function renderNetworkNode(node) {
   `;
 }
 
-function renderNetworkPath(path) {
+function renderNetworkDiagram(level) {
+  if (!level.diagram) {
+    return "";
+  }
+
+  const nodesById = Object.fromEntries(level.diagram.nodes.map((node) => [node.id, node]));
+
   return `
-    <div class="network-path">
-      ${path
-        .map((node, index) => {
-          const connector = index < path.length - 1
-            ? '<span class="network-link" aria-hidden="true"></span>'
-            : "";
-          return `${renderNetworkNode(node)}${connector}`;
-        })
-        .join("")}
+    <div class="network-diagram-scroll">
+      <div
+        class="network-diagram"
+        style="--diagram-ratio:${escapeHtml(level.diagram.ratio || "16 / 9")};"
+        aria-label="Schéma simplifié du niveau ${escapeHtml(level.number)}"
+      >
+        <svg class="network-cables" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+          ${level.diagram.links
+            .map((link) => {
+              const from = nodesById[link[0]];
+              const to = nodesById[link[1]];
+              return `<line x1="${Number(from.x)}" y1="${Number(from.y)}" x2="${Number(to.x)}" y2="${Number(to.y)}"></line>`;
+            })
+            .join("")}
+        </svg>
+        ${level.diagram.nodes.map(renderNetworkNode).join("")}
+      </div>
     </div>
+  `;
+}
+
+function renderDetailedExplanation(level) {
+  const explanation = (window.NET_PRACTICE_EXPLANATIONS || {})[level.number];
+
+  if (!explanation) {
+    return "";
+  }
+
+  const calculationSteps = explanation.calculations
+    .map(
+      (step, index) => `
+        <section class="calculation-step">
+          <span>${index + 1}</span>
+          <div>
+            <h5>${escapeHtml(step.title)}</h5>
+            ${step.body.map((line) => `<p data-reading>${escapeHtml(line)}</p>`).join("")}
+            ${step.code ? `<pre><code>${escapeHtml(step.code)}</code></pre>` : ""}
+          </div>
+        </section>
+      `,
+    )
+    .join("");
+
+  return `
+    <section class="level-deep-dive" aria-label="Explication détaillée du niveau ${escapeHtml(level.number)}">
+      <header>
+        <p>Corrigé raisonné</p>
+        <h4>${escapeHtml(explanation.title)}</h4>
+        ${explanation.intro.map((line) => `<p data-reading>${escapeHtml(line)}</p>`).join("")}
+      </header>
+      <section class="observation-panel">
+        <h4>1. Ce qu’il faut relever avant de calculer</h4>
+        <ul>${renderTextList(explanation.observations)}</ul>
+      </section>
+      <section class="calculation-panel">
+        <h4>2. Calcul et construction de la solution</h4>
+        ${calculationSteps}
+      </section>
+      <section class="packet-panel">
+        <h4>3. Suivre le paquet pour prouver que cela fonctionne</h4>
+        ${explanation.packet.map((line) => `<p data-reading>${escapeHtml(line)}</p>`).join("")}
+        <pre><code>${escapeHtml(explanation.packetTrace)}</code></pre>
+      </section>
+      <section class="verification-panel">
+        <h4>4. Vérification avant le check</h4>
+        <ol>${renderTextList(explanation.verification)}</ol>
+      </section>
+    </section>
   `;
 }
 
@@ -150,9 +217,7 @@ function renderNetPracticeLevels(topicId) {
                   <h3>${escapeHtml(level.title)}</h3>
                 </div>
               </div>
-              <div class="network-diagram" aria-label="Schéma simplifié du niveau ${escapeHtml(level.number)}">
-                ${level.topology.map(renderNetworkPath).join("")}
-              </div>
+              ${renderNetworkDiagram(level)}
               <div class="level-columns">
                 <section>
                   <h4>Ce que le niveau enseigne</h4>
@@ -175,6 +240,7 @@ function renderNetPracticeLevels(topicId) {
                   <ul>${renderTextList(level.traps)}</ul>
                 </section>
               </div>
+              ${renderDetailedExplanation(level)}
             </article>
           `,
         )
