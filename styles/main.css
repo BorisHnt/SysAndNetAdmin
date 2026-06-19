@@ -177,6 +177,10 @@ a:focus-visible {
   background: var(--accent);
 }
 
+.sidebar-shortcut + .sidebar-shortcut {
+  margin-top: 0.55rem;
+}
+
 .sidebar-shortcut::after {
   content: "->";
   position: absolute;
