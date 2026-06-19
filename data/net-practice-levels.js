@@ -1,7 +1,7 @@
 window.NET_PRACTICE_LEVELS = [
   {
     number: "01",
-    title: "Deux réseaux directs",
+    title: "Comprendre qui est dans le même réseau",
     focus: "Reconnaître un même sous-réseau",
     diagram: {
       ratio: "16 / 8",
@@ -50,7 +50,7 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "02",
-    title: "Blocs /27 et liens /30",
+    title: "Trouver les limites d’un réseau",
     focus: "Calculer une plage précise",
     diagram: {
       ratio: "16 / 8",
@@ -97,7 +97,7 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "03",
-    title: "Trois machines sur un switch",
+    title: "Relier plusieurs machines avec un switch",
     focus: "Un seul LAN partagé",
     diagram: {
       ratio: "16 / 9",
@@ -146,7 +146,7 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "04",
-    title: "LAN avec une interface de routeur",
+    title: "Trouver la gateway locale",
     focus: "Choisir un sous-réseau sans chevauchement",
     diagram: {
       ratio: "16 / 9",
@@ -195,7 +195,7 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "05",
-    title: "Deux LAN reliés par un routeur",
+    title: "Faire communiquer deux quartiers",
     focus: "Configurer les gateways des hôtes",
     diagram: {
       ratio: "16 / 9",
@@ -240,12 +240,12 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "06",
-    title: "Sortir vers Internet",
+    title: "Faire sortir une machine vers Internet",
     focus: "Route par défaut et route de retour",
     diagram: {
       ratio: "16 / 9",
       nodes: [
-        { id: "I", type: "internet", label: "Internet", detail: "8.8.8.8", x: 18, y: 24 },
+        { id: "I", type: "internet", label: "Internet", detail: "destination extérieure", x: 18, y: 24 },
         { id: "R", type: "router", label: "Routeur", detail: "LAN + WAN", x: 42, y: 52 },
         { id: "S", type: "switch", label: "Switch", detail: "LAN interne", x: 68, y: 52 },
         { id: "A", type: "pc", label: "Serveur A", detail: "réseau interne", x: 82, y: 78 }
@@ -257,7 +257,7 @@ window.NET_PRACTICE_LEVELS = [
         { type: "pc", label: "Serveur A", detail: "LAN interne" },
         { type: "switch", label: "Switch", detail: "LAN" },
         { type: "router", label: "Routeur", detail: "LAN + WAN" },
-        { type: "internet", label: "Internet", detail: "8.8.8.8" }
+        { type: "internet", label: "Internet", detail: "destination extérieure" }
       ]
     ],
     principle: [
@@ -270,25 +270,25 @@ window.NET_PRACTICE_LEVELS = [
       "Mets le serveur en /25.",
       "Configure l’interface LAN du routeur avec une adresse de .129 à .254, différente de .227.",
       "Mets sur le serveur une route par défaut via cette interface LAN.",
-      "Sur le routeur, utilise une route par défaut ou une route couvrant 8.8.8.8 via 163.172.250.1.",
+      "Sur le routeur, utilise une route par défaut vers le voisin Internet 163.172.250.1.",
       "Sur Internet, remplace la route /31 par N.N.N.128/25 via 163.172.250.12."
     ],
     example:
-      "A = P.Q.R.227/25\nRouteur LAN = P.Q.R.254/25\nRoute A = 0.0.0.0/0 via P.Q.R.254\nRoute routeur = 0.0.0.0/0 via 163.172.250.1\nRoute Internet = P.Q.R.128/25 via 163.172.250.12",
+      "A = 28.141.155.227/25\nRouteur LAN = 28.141.155.254/25\nRoute A = 0.0.0.0/0 via 28.141.155.254\nRouteur WAN = 163.172.250.12/28\nRoute routeur = 0.0.0.0/0 via 163.172.250.1\nRoute Internet = 28.141.155.128/25 via 163.172.250.12",
     why: [
       "Le serveur remet tout trafic non local à son routeur.",
-      "Le routeur envoie 8.8.8.8 vers l’interface Internet.",
+      "Le routeur envoie toute destination extérieure vers son voisin Internet.",
       "La route de retour d’Internet couvre exactement le LAN du serveur."
     ],
     traps: [
       "Une route /31 ne couvre pas le réseau interne.",
-      "Le next hop Internet doit être l’interface voisine, pas 8.8.8.8.",
+      "Le next hop Internet doit être l’interface voisine, pas la destination finale.",
       "Internet refuse de router les plages privées dans ce simulateur."
     ]
   },
   {
     number: "07",
-    title: "Deux routeurs en chaîne",
+    title: "Traverser deux routeurs sans se perdre",
     focus: "Trois sous-réseaux et quatre gateways",
     diagram: {
       ratio: "16 / 9",
@@ -335,7 +335,7 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "08",
-    title: "VLSM et agrégation vers Internet",
+    title: "Découper une plage sans chevauchement",
     focus: "Découper un /26 en plusieurs réseaux",
     diagram: {
       ratio: "16 / 10",
@@ -388,7 +388,7 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "09",
-    title: "Routes spécifiques et ordre de lecture",
+    title: "Lire les routes dans le bon ordre",
     focus: "Plusieurs LAN et routes de retour Internet",
     diagram: {
       ratio: "16 / 12",
@@ -444,7 +444,7 @@ window.NET_PRACTICE_LEVELS = [
       "Internet possède une route de retour pour chaque famille interne publique, y compris le réseau dicté par la gateway fixe de D."
     ],
     traps: [
-      "La route de B vers 8.8.8.8 doit devenir une route utile, généralement default.",
+      "La route de B vers l’extérieur doit devenir une route utile, généralement default.",
       "Place toujours les routes spécifiques avant une route plus large.",
       "N’utilise pas 10.0.0.0/8 si C doit communiquer avec Internet : le simulateur refuse les réseaux privés.",
       "Ne modifie pas mentalement la gateway fixe de D : c’est le réseau D qui doit s’adapter autour d’elle."
@@ -452,7 +452,7 @@ window.NET_PRACTICE_LEVELS = [
   },
   {
     number: "10",
-    title: "Synthèse complète",
+    title: "Construire le réseau complet pas à pas",
     focus: "Plan d’adressage hiérarchique dans un /24",
     diagram: {
       ratio: "16 / 12",

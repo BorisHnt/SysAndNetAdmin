@@ -263,12 +263,12 @@ window.NET_PRACTICE_EXPLANATIONS = {
     title: "Construire un aller et un retour entre un LAN et Internet",
     intro: [
       "Atteindre Internet exige une chaîne complète : serveur vers routeur, routeur vers Internet, puis une route de retour d’Internet vers le LAN.",
-      "Le check échoue si une seule de ces trois décisions manque, même si toutes les IP locales semblent correctes."
+      "L’exemple utilise 28.141.155.227/25 pour rendre chaque calcul visible. Dans ton exercice, remplace ces nombres par ceux affichés, mais conserve exactement la même méthode."
     ],
     observations: [
-      "Le serveur possède une IP se terminant par .227.",
-      "Le routeur possède une interface publique fixe reliée à Internet.",
-      "Internet expose une cible 8.8.8.8 et une route de retour modifiable.",
+      "Le serveur A possède l’adresse 28.141.155.227.",
+      "Le routeur possède une interface publique 163.172.250.12/28 reliée au voisin Internet 163.172.250.1.",
+      "La destination extérieure représente Internet ; son adresse précise n’est pas une gateway à saisir.",
       "Le simulateur refuse de router les plages privées depuis Internet."
     ],
     calculations: [
@@ -276,45 +276,45 @@ window.NET_PRACTICE_EXPLANATIONS = {
         title: "Déterminer le LAN du serveur",
         body: [
           "Avec /25, les blocs sont .0-.127 et .128-.255. L’adresse .227 appartient au second bloc.",
-          "Le réseau du serveur est donc P.Q.R.128/25, avec des hôtes .129-.254."
+          "Le réseau du serveur est donc 28.141.155.128/25, avec des hôtes .129-.254."
         ],
-        code: "Serveur : P.Q.R.227/25\nRéseau : P.Q.R.128\nBroadcast : P.Q.R.255"
+        code: "Serveur : 28.141.155.227/25\nRéseau : 28.141.155.128\nHôtes : 28.141.155.129 à 28.141.155.254\nBroadcast : 28.141.155.255"
       },
       {
         title: "Créer la gateway locale",
         body: [
-          "L’interface LAN du routeur doit appartenir au même /25. P.Q.R.254 est un choix naturel si elle est libre.",
+          "L’interface LAN du routeur doit appartenir au même /25. 28.141.155.254 est libre et se trouve dans la plage hôte.",
           "Le serveur utilise cette adresse comme next hop de sa route par défaut."
         ],
-        code: "Routeur LAN : P.Q.R.254/25\nServeur : default via P.Q.R.254"
+        code: "Routeur LAN : 28.141.155.254/25\nServeur : default via 28.141.155.254"
       },
       {
         title: "Faire sortir le routeur vers Internet",
         body: [
           "Le routeur et Internet partagent le lien public 163.172.250.0/28.",
-          "La route du routeur doit couvrir 8.8.8.8, généralement avec 0.0.0.0/0, via l’interface Internet 163.172.250.1."
+          "La route par défaut du routeur couvre toute destination extérieure et pointe vers l’interface Internet voisine 163.172.250.1."
         ],
         code: "Routeur WAN : 163.172.250.12/28\nRoute routeur : default via 163.172.250.1"
       },
       {
         title: "Écrire la route de retour",
         body: [
-          "Internet doit savoir que P.Q.R.128/25 se trouve derrière le routeur.",
+          "Internet doit savoir que 28.141.155.128/25 se trouve derrière le routeur.",
           "La gateway de cette route est l’interface publique du routeur, 163.172.250.12."
         ],
-        code: "Internet : P.Q.R.128/25 via 163.172.250.12"
+        code: "Internet : 28.141.155.128/25 via 163.172.250.12"
       }
     ],
     packet: [
-      "Le serveur envoie 8.8.8.8 à sa gateway P.Q.R.254.",
+      "Le serveur remet le paquet destiné à Internet à sa gateway 28.141.155.254.",
       "Le routeur applique sa route par défaut et remet le paquet à 163.172.250.1.",
-      "Pour répondre, Internet consulte sa route vers P.Q.R.128/25 et renvoie le paquet à 163.172.250.12, puis le routeur livre localement au serveur."
+      "Pour répondre, Internet consulte sa route vers 28.141.155.128/25 et renvoie le paquet à 163.172.250.12, puis le routeur livre localement au serveur."
     ],
-    packetTrace: "Serveur -> P.Q.R.254\nRouteur -> 163.172.250.1\nInternet atteint 8.8.8.8\nRetour Internet -> 163.172.250.12\nRouteur -> Serveur sur P.Q.R.128/25",
+    packetTrace: "Serveur -> 28.141.155.254\nRouteur -> 163.172.250.1\nDestination extérieure atteinte\nRetour Internet -> 163.172.250.12\nRouteur -> Serveur sur 28.141.155.128/25",
     verification: [
       "Le serveur et l’interface LAN sont-ils dans le même /25 ?",
       "La route du serveur pointe-t-elle vers le routeur local ?",
-      "La route du routeur couvre-t-elle 8.8.8.8 ?",
+      "La route par défaut du routeur couvre-t-elle la destination extérieure ?",
       "Internet possède-t-il une route de retour vers le bon /25 ?",
       "Le LAN utilise-t-il une plage publique acceptée par le simulateur ?"
     ]

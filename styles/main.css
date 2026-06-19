@@ -27,11 +27,13 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
   min-height: 100vh;
   margin: 0;
+  overflow-x: hidden;
   background: var(--bg);
   color: var(--ink);
   font-family: "Lexend", system-ui, sans-serif;
@@ -452,6 +454,7 @@ button:hover {
 }
 
 pre {
+  max-width: 100%;
   overflow-x: auto;
   margin: 0.45rem 0 0.85rem;
   border-radius: var(--radius);
@@ -551,6 +554,145 @@ code {
 
 .assist-word strong {
   font-weight: 800;
+}
+
+.net-practice-basics {
+  margin: 1.5rem 0 2rem;
+  border-top: 4px solid var(--accent);
+  border-bottom: 1px solid var(--line);
+  background: #f7fbfa;
+  padding: clamp(1rem, 3vw, 1.7rem);
+}
+
+.net-practice-basics > header {
+  max-width: 78ch;
+  margin-bottom: 1.3rem;
+}
+
+.net-practice-basics > header h3 {
+  margin: 0 0 0.55rem;
+  font-size: 1.55rem;
+}
+
+.net-practice-basics > header p:last-child {
+  margin: 0;
+}
+
+.basics-lesson {
+  border-top: 1px solid var(--line);
+  padding: 1.2rem 0;
+}
+
+.basics-lesson-title {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.65rem;
+  align-items: center;
+  margin-bottom: 0.75rem;
+}
+
+.basics-lesson-title > span {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  background: var(--accent);
+  color: white;
+  font-weight: 800;
+}
+
+.basics-lesson-title h4,
+.mask-reference h4,
+.basics-faq h4 {
+  margin: 0;
+  font-size: 1.08rem;
+}
+
+.pedagogy-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.pedagogy-block {
+  border-left: 4px solid #39708d;
+  background: var(--surface);
+  padding: 0.8rem 0.9rem;
+}
+
+.pedagogy-block.technical-block {
+  border-left-color: #6c5a9b;
+}
+
+.pedagogy-block strong,
+.concrete-example > strong {
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  text-transform: uppercase;
+}
+
+.pedagogy-block p {
+  margin: 0.3rem 0 0;
+}
+
+.concrete-example {
+  margin-top: 0.8rem;
+}
+
+.concrete-example pre {
+  margin-top: 0.35rem;
+}
+
+.remember-block {
+  margin: 0.8rem 0 0;
+  border-left: 4px solid var(--accent);
+  background: #eaf6f2;
+  padding: 0.75rem 0.9rem;
+}
+
+.mask-reference,
+.basics-faq {
+  margin-top: 1.2rem;
+  border-top: 1px solid var(--line);
+  padding-top: 1.2rem;
+}
+
+.table-scroll {
+  overflow-x: auto;
+}
+
+.mask-reference table {
+  width: 100%;
+  min-width: 40rem;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+.mask-reference th,
+.mask-reference td {
+  border: 1px solid var(--line);
+  padding: 0.55rem 0.65rem;
+  text-align: left;
+}
+
+.mask-reference th {
+  background: var(--surface-muted);
+}
+
+.basics-question {
+  margin-top: 0.55rem;
+  border-left: 4px solid var(--line-strong);
+  background: var(--surface);
+  padding: 0.65rem 0.8rem;
+}
+
+.basics-question summary {
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.basics-question p {
+  margin: 0.55rem 0 0;
 }
 
 .level-guide {
@@ -737,6 +879,135 @@ code {
   margin-bottom: 0.35rem;
 }
 
+.concrete-walkthrough {
+  margin-top: 1.2rem;
+  border: 1px solid #b8d8ce;
+  border-top: 4px solid var(--accent);
+  background: var(--surface);
+  padding: clamp(0.9rem, 2.5vw, 1.25rem);
+}
+
+.concrete-walkthrough > header {
+  margin-bottom: 1rem;
+}
+
+.concrete-walkthrough > header p {
+  margin: 0 0 0.2rem;
+  color: var(--accent-dark);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.concrete-walkthrough > header h4 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.walkthrough-intro {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.walkthrough-intro section,
+.rules-block,
+.final-solution,
+.packet-journey,
+.frequent-errors {
+  border-left: 4px solid #39708d;
+  background: #f7fafb;
+  padding: 0.8rem 0.9rem;
+}
+
+.rules-block,
+.deductions,
+.final-solution,
+.packet-journey,
+.frequent-errors {
+  margin-top: 0.85rem;
+}
+
+.rules-block {
+  border-left-color: var(--accent);
+  background: #f5faf8;
+}
+
+.packet-journey {
+  border-left-color: #6c5a9b;
+  background: #f7f5fb;
+}
+
+.frequent-errors {
+  border-left-color: var(--warning);
+  background: #fff8ec;
+}
+
+.concrete-walkthrough h5 {
+  margin: 0 0 0.45rem;
+  color: var(--accent-dark);
+  font-size: 0.95rem;
+}
+
+.concrete-walkthrough ul,
+.concrete-walkthrough ol {
+  margin: 0;
+  padding-left: 1.2rem;
+}
+
+.concrete-walkthrough li {
+  margin-bottom: 0.35rem;
+}
+
+.deductions > h5 {
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 0.45rem;
+}
+
+.deduction-step {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.7rem;
+  margin-top: 0.8rem;
+}
+
+.deduction-number {
+  display: grid;
+  place-items: center;
+  width: 1.85rem;
+  height: 1.85rem;
+  background: var(--accent);
+  color: white;
+  font-size: 0.8rem;
+  font-weight: 800;
+}
+
+.deduction-content {
+  min-width: 0;
+  border-left: 3px solid var(--line);
+  padding-left: 0.8rem;
+}
+
+.deduction-content p {
+  max-width: 82ch;
+  margin: 0.25rem 0;
+}
+
+.deduced-value {
+  margin: 0.5rem 0 !important;
+  background: #eaf6f2;
+  padding: 0.55rem 0.65rem;
+}
+
+.final-solution {
+  border-left-color: var(--accent);
+  background: #eef8f5;
+}
+
+.final-solution p {
+  margin: 0.55rem 0 0;
+}
+
 .level-deep-dive {
   margin-top: 1.35rem;
   border-top: 2px solid var(--accent);
@@ -850,15 +1121,20 @@ code {
     z-index: 10;
     width: 100%;
     max-height: 16rem;
+    overflow-x: hidden;
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
 
   .content {
+    min-width: 0;
     margin-left: 0;
   }
 
   .topic-nav {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
     grid-auto-flow: column;
     grid-auto-columns: minmax(12rem, 1fr);
     overflow-x: auto;
@@ -867,7 +1143,9 @@ code {
 
   .toolbar,
   .overview,
-  .level-columns {
+  .level-columns,
+  .pedagogy-pair,
+  .walkthrough-intro {
     grid-template-columns: 1fr;
   }
 
@@ -876,6 +1154,7 @@ code {
   }
 
   .topic-card {
+    min-width: 0;
     margin-left: -1rem;
     margin-right: -1rem;
     border-left: 0;
