@@ -525,6 +525,30 @@ code {
   color: var(--muted);
 }
 
+.back-to-top {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  border: 1px solid var(--accent);
+  border-radius: 50%;
+  background: var(--accent-dark);
+  color: white;
+  box-shadow: 0 8px 20px rgb(29 37 45 / 0.18);
+  font-size: 1.35rem;
+  font-weight: 700;
+  line-height: 1;
+  text-decoration: none;
+}
+
+.back-to-top:hover {
+  background: var(--accent);
+}
+
 .assist-word strong {
   font-weight: 800;
 }
