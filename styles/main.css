@@ -728,6 +728,364 @@ code {
   margin: 0.55rem 0 0;
 }
 
+.net-practice-page {
+  padding-top: 0;
+}
+
+.net-practice-course {
+  margin: 0 -0.5rem;
+}
+
+.net-practice-intro {
+  margin: 0 -0.7rem;
+  border-top: 5px solid var(--accent);
+  border-bottom: 1px solid var(--line);
+  background: #f4faf8;
+  padding: clamp(1.2rem, 3vw, 2rem);
+}
+
+.net-practice-intro h2 {
+  max-width: none;
+  margin-bottom: 0.7rem;
+}
+
+.net-practice-intro > p:not(.topic-kicker) {
+  max-width: 72ch;
+}
+
+.course-key {
+  margin: 1rem 0 0;
+  border-left: 5px solid var(--accent);
+  background: var(--surface);
+  padding: 0.8rem 1rem;
+  color: var(--accent-dark);
+  font-size: 1.08rem;
+  font-weight: 700;
+}
+
+.course-section {
+  border-bottom: 1px solid var(--line);
+  padding: clamp(1.4rem, 3vw, 2rem) 0;
+}
+
+.course-heading {
+  display: grid;
+  grid-template-columns: 2.7rem 1fr;
+  gap: 0.8rem;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.course-heading > span {
+  display: grid;
+  place-items: center;
+  width: 2.6rem;
+  height: 2.6rem;
+  background: var(--accent);
+  color: white;
+  font-size: 0.82rem;
+  font-weight: 800;
+}
+
+.course-heading p,
+.course-heading h3 {
+  margin: 0;
+}
+
+.course-heading p {
+  color: var(--accent-dark);
+  font-size: 0.75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.course-heading h3 {
+  font-size: 1.45rem;
+  line-height: 1.2;
+}
+
+.core-ideas {
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+  gap: 0.65rem;
+}
+
+.core-idea {
+  min-width: 0;
+  border: 1px solid var(--line);
+  border-top: 4px solid var(--accent);
+  background: var(--surface-muted);
+  padding: 0.8rem;
+}
+
+.core-idea > span {
+  display: grid;
+  place-items: center;
+  width: 1.8rem;
+  height: 1.8rem;
+  margin-bottom: 0.55rem;
+  background: var(--accent);
+  color: white;
+  font-size: 0.75rem;
+  font-weight: 800;
+}
+
+.core-idea h4 {
+  margin: 0 0 0.35rem;
+  font-size: 1rem;
+}
+
+.core-idea strong {
+  display: block;
+  color: var(--accent-dark);
+  font-size: 0.82rem;
+  line-height: 1.35;
+}
+
+.core-idea p {
+  margin: 0.5rem 0 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.5;
+}
+
+.mental-model-layout {
+  display: grid;
+  grid-template-columns: minmax(13rem, 0.75fr) minmax(0, 1.4fr);
+  gap: 1rem;
+  align-items: stretch;
+}
+
+.mental-model-layout pre {
+  display: grid;
+  place-items: center;
+  min-height: 15rem;
+  margin: 0;
+  font-size: 1rem;
+  text-align: center;
+}
+
+.mental-model-layout ol {
+  display: grid;
+  align-content: center;
+  gap: 0.65rem;
+  margin: 0;
+  border-left: 4px solid #39708d;
+  background: #f7fafb;
+  padding: 1rem 1rem 1rem 2.4rem;
+}
+
+.route-expression {
+  max-width: 34rem;
+  font-size: 1.05rem;
+  text-align: center;
+}
+
+.route-parts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+  margin: 0.8rem 0;
+}
+
+.route-parts p {
+  margin: 0;
+  border-left: 4px solid #39708d;
+  background: #f7fafb;
+  padding: 0.8rem;
+}
+
+.route-example,
+.mask-tip {
+  margin-top: 0.8rem;
+  border-left: 4px solid var(--accent);
+  background: #eef8f5;
+  padding: 0.85rem 1rem;
+}
+
+.route-example pre,
+.mask-tip pre {
+  margin-top: 0.4rem;
+}
+
+.route-example p,
+.mask-tip p {
+  margin: 0.45rem 0 0;
+}
+
+.mask-course table {
+  width: 100%;
+  min-width: 34rem;
+  border-collapse: collapse;
+  background: var(--surface);
+}
+
+.mask-course th,
+.mask-course td {
+  border: 1px solid var(--line);
+  padding: 0.55rem 0.7rem;
+  text-align: left;
+}
+
+.mask-course th {
+  background: var(--surface-muted);
+}
+
+.given-values {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.8rem;
+}
+
+.given-values p {
+  display: grid;
+  gap: 0.2rem;
+  margin: 0;
+  border-left: 4px solid var(--accent);
+  background: var(--surface-muted);
+  padding: 0.8rem;
+}
+
+.given-values strong {
+  color: var(--accent-dark);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+}
+
+.given-values span {
+  font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace;
+  font-weight: 700;
+}
+
+.guided-steps {
+  display: grid;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.guided-steps li {
+  padding-left: 0.35rem;
+}
+
+.method-steps {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.method-steps li {
+  display: grid;
+  grid-template-columns: 2rem 1fr;
+  gap: 0.65rem;
+  border-top: 3px solid var(--accent);
+  background: var(--surface-muted);
+  padding: 0.85rem;
+}
+
+.method-steps li > span {
+  display: grid;
+  place-items: center;
+  width: 1.9rem;
+  height: 1.9rem;
+  background: var(--accent);
+  color: white;
+  font-size: 0.78rem;
+  font-weight: 800;
+}
+
+.method-steps strong {
+  display: block;
+  line-height: 1.3;
+}
+
+.method-steps p {
+  margin: 0.35rem 0 0;
+  color: var(--muted);
+  font-size: 0.86rem;
+  line-height: 1.5;
+}
+
+.anti-panic {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: 1rem;
+  border-bottom: 0;
+  background: #fff8ec;
+  padding-left: clamp(1rem, 3vw, 1.5rem);
+  padding-right: clamp(1rem, 3vw, 1.5rem);
+}
+
+.anti-panic h3 {
+  margin: 0 0 0.6rem;
+  font-size: 1.45rem;
+}
+
+.anti-panic ol {
+  margin: 0;
+  padding-left: 1.25rem;
+}
+
+.course-notes {
+  border-left: 4px solid var(--warning);
+  background: var(--surface);
+  padding: 0.7rem 0.9rem;
+}
+
+.course-notes p {
+  margin: 0.35rem 0;
+  font-size: 0.86rem;
+}
+
+.success-check,
+.technical-library,
+.level-technical-details {
+  margin-top: 1rem;
+  border: 1px solid var(--line);
+  background: var(--surface);
+}
+
+.success-check summary,
+.technical-library > summary,
+.level-technical-details > summary {
+  cursor: pointer;
+  color: var(--accent-dark);
+  font-weight: 800;
+}
+
+.success-check summary {
+  padding: 0.8rem 1rem;
+}
+
+.success-check ul {
+  margin: 0;
+  padding: 0 1.2rem 1rem 2.2rem;
+}
+
+.technical-library {
+  margin-top: 2rem;
+  border-top: 4px solid var(--line-strong);
+}
+
+.technical-library > summary {
+  display: grid;
+  padding: 1rem 1.1rem;
+}
+
+.technical-library > summary small {
+  margin-top: 0.2rem;
+  color: var(--muted);
+  font-weight: 400;
+}
+
+.technical-library-content {
+  border-top: 1px solid var(--line);
+  padding: 0 1.1rem 1rem;
+}
+
 .level-guide {
   margin-top: 2.2rem;
   border-top: 3px solid var(--accent);
@@ -991,7 +1349,7 @@ code {
 }
 
 .walkthrough-intro section,
-.rules-block,
+.networks-block,
 .final-solution,
 .packet-journey,
 .frequent-errors {
@@ -1000,7 +1358,7 @@ code {
   padding: 0.8rem 0.9rem;
 }
 
-.rules-block,
+.networks-block,
 .deductions,
 .final-solution,
 .packet-journey,
@@ -1008,9 +1366,47 @@ code {
   margin-top: 0.85rem;
 }
 
-.rules-block {
+.networks-block {
   border-left-color: var(--accent);
   background: #f5faf8;
+}
+
+.level-rules {
+  margin: 0.7rem 0 1rem 2.7rem;
+  border-left: 4px solid #39708d;
+  background: #f7fafb;
+  padding: 0.7rem 0.9rem;
+}
+
+.level-rules > strong {
+  color: var(--accent-dark);
+  font-size: 0.82rem;
+}
+
+.level-rules ul {
+  margin-top: 0.35rem;
+}
+
+.level-technical-details {
+  border-top: 3px solid var(--line-strong);
+}
+
+.level-technical-details > summary {
+  padding: 0.8rem 0.9rem;
+}
+
+.level-technical-details[open] > summary {
+  border-bottom: 1px solid var(--line);
+  background: var(--surface-muted);
+}
+
+.level-technical-details > :not(summary) {
+  margin-left: 0.9rem;
+  margin-right: 0.9rem;
+}
+
+.level-technical-details > .level-deep-dive {
+  margin-bottom: 0.9rem;
 }
 
 .packet-journey {
@@ -1229,8 +1625,19 @@ code {
   .overview,
   .level-columns,
   .pedagogy-pair,
-  .walkthrough-intro {
+  .walkthrough-intro,
+  .mental-model-layout,
+  .route-parts,
+  .anti-panic {
     grid-template-columns: 1fr;
+  }
+
+  .core-ideas {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .method-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
   .hero h2 {
@@ -1245,6 +1652,32 @@ code {
     border-right: 0;
   }
 
+}
+
+@media (max-width: 560px) {
+  .core-ideas,
+  .method-steps,
+  .given-values {
+    grid-template-columns: 1fr;
+  }
+
+  .net-practice-intro {
+    margin-left: -0.45rem;
+    margin-right: -0.45rem;
+  }
+
+  .course-heading {
+    grid-template-columns: 2.35rem 1fr;
+  }
+
+  .course-heading > span {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .level-rules {
+    margin-left: 0;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

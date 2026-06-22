@@ -105,30 +105,17 @@ function renderNetPracticeBasics(topicId) {
     return "";
   }
 
-  const lessons = basics.lessons
+  const ideas = basics.ideas
     .map(
-      (lesson) => `
-        <section class="basics-lesson">
-          <div class="basics-lesson-title">
-            <span>${escapeHtml(lesson.letter)}</span>
-            <h4>${escapeHtml(lesson.title)}</h4>
+      (idea) => `
+        <article class="core-idea">
+          <span>${escapeHtml(idea.letter)}</span>
+          <div>
+            <h4>${escapeHtml(idea.title)}</h4>
+            <strong data-reading>${escapeHtml(idea.short)}</strong>
+            <p data-reading>${escapeHtml(idea.body)}</p>
           </div>
-          <div class="pedagogy-pair">
-            <div class="pedagogy-block novice-block">
-              <strong>Version novice</strong>
-              <p data-reading>${escapeHtml(lesson.novice)}</p>
-            </div>
-            <div class="pedagogy-block technical-block">
-              <strong>Version technique</strong>
-              <p data-reading>${escapeHtml(lesson.technical)}</p>
-            </div>
-          </div>
-          <div class="concrete-example">
-            <strong>Exemple concret</strong>
-            <pre><code>${escapeHtml(lesson.example)}</code></pre>
-          </div>
-          <p class="remember-block" data-reading><strong>À retenir :</strong> ${escapeHtml(lesson.remember)}</p>
-        </section>
+        </article>
       `,
     )
     .join("");
@@ -143,44 +130,172 @@ function renderNetPracticeBasics(topicId) {
     )
     .join("");
 
-  const questions = basics.questions
+  const method = basics.method
     .map(
-      (item) => `
-        <details class="basics-question">
-          <summary>${escapeHtml(item.title)}</summary>
-          <p data-reading>${escapeHtml(item.answer)}</p>
-        </details>
+      (step, index) => `
+        <li>
+          <span>${index + 1}</span>
+          <div>
+            <strong>${escapeHtml(step.title)}</strong>
+            <p data-reading>${escapeHtml(step.body)}</p>
+          </div>
+        </li>
       `,
     )
     .join("");
 
   return `
-    <section class="net-practice-basics" aria-label="Bases indispensables avant Net Practice">
-      <header>
-        <p class="preamble-kicker">Point de départ</p>
-        <h3>${escapeHtml(basics.title)}</h3>
+    <section class="net-practice-course" aria-label="Cours débutant Net Practice">
+      <header class="net-practice-intro">
+        <p class="topic-kicker">Réseau expliqué simplement</p>
+        <h2>${escapeHtml(basics.title)}</h2>
         <p data-reading>${escapeHtml(basics.intro)}</p>
+        <p class="course-key" data-reading>${escapeHtml(basics.keySentence)}</p>
       </header>
-      ${lessons}
-      <section class="mask-reference">
-        <h4>Table de calcul rapide</h4>
+
+      <section class="course-section" id="net-practice-five-ideas">
+        <div class="course-heading">
+          <span>01</span>
+          <div>
+            <p>Le minimum pour commencer</p>
+            <h3>Les 5 idées indispensables</h3>
+          </div>
+        </div>
+        <div class="core-ideas">${ideas}</div>
+      </section>
+
+      <section class="course-section mental-model">
+        <div class="course-heading">
+          <span>02</span>
+          <div>
+            <p>Une image à garder en tête</p>
+            <h3>Le mini schéma mental</h3>
+          </div>
+        </div>
+        <div class="mental-model-layout">
+          <pre><code>${escapeHtml(basics.mentalDiagram)}</code></pre>
+          <ol>${renderTextList(basics.mentalExplanation)}</ol>
+        </div>
+        <p class="remember-block" data-reading><strong>À retenir :</strong> le paquet doit pouvoir partir et la réponse doit pouvoir revenir.</p>
+      </section>
+
+      <section class="course-section route-reader">
+        <div class="course-heading">
+          <span>03</span>
+          <div>
+            <p>Lire un panneau de direction</p>
+            <h3>Comprendre une route</h3>
+          </div>
+        </div>
+        <pre class="route-expression"><code>${escapeHtml(basics.route.expression)}</code></pre>
+        <div class="route-parts">
+          <p data-reading>${escapeHtml(basics.route.destination)}</p>
+          <p data-reading>${escapeHtml(basics.route.nextHop)}</p>
+        </div>
+        <div class="route-example">
+          <strong>Exemple concret</strong>
+          <pre><code>${escapeHtml(basics.route.example)}</code></pre>
+          <p data-reading><strong>Traduction novice :</strong> ${escapeHtml(basics.route.translation)}</p>
+        </div>
+        <p class="mistake" data-reading><strong>Erreur fréquente :</strong> ${escapeHtml(basics.route.warning)}</p>
+      </section>
+
+      <section class="course-section mask-course">
+        <div class="course-heading">
+          <span>04</span>
+          <div>
+            <p>Pas besoin de souffrir avec le binaire</p>
+            <h3>Comprendre le mask sans douleur</h3>
+          </div>
+        </div>
         <p data-reading>
-          Le nombre d’adresses inclut l’adresse réseau et le broadcast. Pour les masques ci-dessous, le pas s’applique au dernier octet.
+          Le slash indique la taille du quartier. Plus le slash est grand, plus le quartier est petit.
         </p>
         <div class="table-scroll">
           <table>
             <thead>
-              <tr><th>Préfixe</th><th>Masque</th><th>Adresses</th><th>Hôtes</th><th>Départs des blocs</th></tr>
+              <tr><th>Préfixe</th><th>Mask</th><th>Taille du bloc</th></tr>
             </thead>
             <tbody>${maskRows}</tbody>
           </table>
         </div>
+        <div class="mask-tip">
+          <p data-reading><strong>Astuce :</strong> ${escapeHtml(basics.maskTip.rule)}</p>
+          <pre><code>${escapeHtml(basics.maskTip.example)}</code></pre>
+        </div>
       </section>
-      <section class="basics-faq">
-        <h4>Questions à se poser</h4>
-        ${questions}
+
+      <section class="course-section guided-network-example">
+        <div class="course-heading">
+          <span>05</span>
+          <div>
+            <p>Tout déduire sans deviner</p>
+            <h3>Un exemple concret très guidé</h3>
+          </div>
+        </div>
+        <div class="given-values">
+          <p><strong>IP</strong><span>${escapeHtml(basics.guidedExample.ip)}</span></p>
+          <p><strong>Mask</strong><span>${escapeHtml(basics.guidedExample.mask)}</span></p>
+        </div>
+        <ol class="guided-steps">${renderTextList(basics.guidedExample.steps)}</ol>
+        <div class="final-solution">
+          <h4>Résultat</h4>
+          <pre><code>${escapeHtml(basics.guidedExample.result)}</code></pre>
+        </div>
       </section>
+
+      <section class="course-section method-course">
+        <div class="course-heading">
+          <span>06</span>
+          <div>
+            <p>La même recette pour chaque niveau</p>
+            <h3>La méthode NetPractice en 6 étapes</h3>
+          </div>
+        </div>
+        <ol class="method-steps">${method}</ol>
+      </section>
+
+      <section class="course-section anti-panic">
+        <div>
+          <p class="topic-kicker">Plan de secours</p>
+          <h3>Quand tu bloques, fais ça</h3>
+          <ol>${renderTextList(basics.antiPanic)}</ol>
+        </div>
+        <div class="course-notes">
+          ${basics.notes.map((note) => `<p data-reading>${escapeHtml(note)}</p>`).join("")}
+        </div>
+      </section>
+
+      <details class="success-check">
+        <summary>Ce que tu dois savoir expliquer après ce cours</summary>
+        <ul>${renderTextList(basics.successQuestions)}</ul>
+      </details>
     </section>
+  `;
+}
+
+function renderNetPracticeAdvanced(topic, concepts, open = false) {
+  return `
+    <details class="technical-library"${open ? " open" : ""}>
+      <summary>
+        <span>Approfondissement technique</span>
+        <small>Ancien cours complet, commandes et notions supplémentaires</small>
+      </summary>
+      <div class="technical-library-content">
+        ${renderPreamble(topic.preamble)}
+        <section class="overview" aria-label="Objectifs et notions">
+          <div>
+            <h3>Objectifs</h3>
+            <ul>${renderTextList(topic.objectives)}</ul>
+          </div>
+          <div>
+            <h3>Notions disponibles</h3>
+            <ul>${topic.concepts.map((concept) => `<li>${escapeHtml(concept.title)}</li>`).join("")}</ul>
+          </div>
+        </section>
+        ${concepts}
+      </div>
+    </details>
   `;
 }
 
@@ -502,40 +617,44 @@ function renderConcreteWalkthrough(level) {
   return `
     <section class="concrete-walkthrough" aria-label="Résolution concrète du niveau ${escapeHtml(level.number)}">
       <header>
-        <p>Version novice</p>
-        <h4>Résoudre ce niveau sans deviner</h4>
+        <p>Correction guidée</p>
+        <h4>Comprendre le niveau sans deviner</h4>
       </header>
       <div class="walkthrough-intro">
         <section>
-          <h5>1. Ce que tu vois à l’écran</h5>
+          <h5>A. Ce que tu vois</h5>
           <ul>${renderTextList(guide.screen)}</ul>
         </section>
         <section>
-          <h5>2. Ce que le niveau veut vérifier</h5>
+          <h5>B. Ce que le niveau veut</h5>
           <p data-reading>${escapeHtml(guide.goal)}</p>
         </section>
       </div>
-      <section class="rules-block">
-        <h5>3. Règles utiles</h5>
-        <ul>${renderTextList(guide.rules)}</ul>
+      <section class="networks-block">
+        <h5>C. Les réseaux à créer</h5>
+        <ul>${renderTextList(guide.networks)}</ul>
       </section>
       <section class="deductions">
-        <h5>4. Résolution pas à pas</h5>
+        <h5>D. Résolution pas à pas</h5>
+        <div class="level-rules">
+          <strong>Règles utiles pour ce niveau</strong>
+          <ul>${renderTextList(guide.rules)}</ul>
+        </div>
         ${deductions}
       </section>
       <section class="final-solution">
-        <h5>5. Solution finale de l’exemple</h5>
+        <h5>E. Solution finale de l’exemple</h5>
         <pre><code>${escapeHtml(guide.solution)}</code></pre>
         <p data-reading>
           Ces valeurs servent à comprendre la méthode. Si ton niveau affiche d’autres nombres, conserve le même raisonnement et recalcule les blocs.
         </p>
       </section>
       <section class="packet-journey">
-        <h5>6. Trajet du paquet : pourquoi cela marche</h5>
+        <h5>F. Trajet du paquet : pourquoi cela marche</h5>
         <ol>${renderTextList(guide.packet)}</ol>
       </section>
       <section class="frequent-errors">
-        <h5>7. Erreurs fréquentes</h5>
+        <h5>G. Pièges fréquents</h5>
         <ul>${renderTextList(guide.traps)}</ul>
       </section>
     </section>
@@ -577,29 +696,32 @@ function renderNetPracticeLevels(topicId) {
               </div>
               ${renderNetworkDiagram(level)}
               ${renderConcreteWalkthrough(level)}
-              <div class="level-columns">
-                <section>
-                  <h4>Version technique : notions</h4>
-                  <ul>${renderTextList(level.principle)}</ul>
-                </section>
-                <section>
-                  <h4>Méthode de résolution</h4>
-                  <ol>${renderTextList(level.method)}</ol>
-                </section>
-              </div>
-              <h4>Exemple transposable</h4>
-              <pre><code>${escapeHtml(level.example)}</code></pre>
-              <div class="level-columns">
-                <section class="level-success">
-                  <h4>Pourquoi cela fonctionne</h4>
-                  <ul>${renderTextList(level.why)}</ul>
-                </section>
-                <section class="level-traps">
-                  <h4>Pièges du niveau</h4>
-                  <ul>${renderTextList(level.traps)}</ul>
-                </section>
-              </div>
-              ${renderDetailedExplanation(level)}
+              <details class="level-technical-details">
+                <summary>Approfondir le corrigé technique</summary>
+                <div class="level-columns">
+                  <section>
+                    <h4>Notions techniques</h4>
+                    <ul>${renderTextList(level.principle)}</ul>
+                  </section>
+                  <section>
+                    <h4>Méthode générale</h4>
+                    <ol>${renderTextList(level.method)}</ol>
+                  </section>
+                </div>
+                <h4>Exemple transposable</h4>
+                <pre><code>${escapeHtml(level.example)}</code></pre>
+                <div class="level-columns">
+                  <section class="level-success">
+                    <h4>Pourquoi cela fonctionne</h4>
+                    <ul>${renderTextList(level.why)}</ul>
+                  </section>
+                  <section class="level-traps">
+                    <h4>Pièges techniques</h4>
+                    <ul>${renderTextList(level.traps)}</ul>
+                  </section>
+                </div>
+                ${renderDetailedExplanation(level)}
+              </details>
             </article>
           `,
         )
@@ -679,36 +801,40 @@ function renderTopic(topicId, conceptSlug = "") {
     })
     .join("");
 
-  elements.panel.innerHTML = `
-    <article class="topic-card">
-      <p class="topic-kicker">${escapeHtml(topic.focus)}</p>
-      <h2>${escapeHtml(topic.title)}</h2>
-      <p class="summary" data-reading>${escapeHtml(topic.summary)}</p>
-      <ul class="meta-list" aria-label="Métadonnées">
-        <li>${escapeHtml(topic.status)}</li>
-      <li>${topic.concepts.length} notions</li>
-        <li>${escapeHtml(topic.focus)}</li>
-      </ul>
-      ${renderNetPracticeBasics(topic.id)}
-      ${renderPreamble(topic.preamble)}
-      <section class="overview" aria-label="Objectifs et notions">
-        <div>
-          <h3>Objectifs</h3>
-          <ul>
-            ${renderTextList(topic.objectives)}
-          </ul>
-        </div>
-        <div>
-          <h3>Notions</h3>
-          <ul>
-            ${topic.concepts.map((concept) => `<li>${escapeHtml(concept.title)}</li>`).join("")}
-          </ul>
-        </div>
-      </section>
-      ${concepts}
-      ${renderNetPracticeLevels(topic.id)}
-    </article>
-  `;
+  if (topic.id === "net-practice") {
+    elements.panel.innerHTML = `
+      <article class="topic-card net-practice-page">
+        ${renderNetPracticeBasics(topic.id)}
+        ${renderNetPracticeLevels(topic.id)}
+        ${renderNetPracticeAdvanced(topic, concepts, Boolean(conceptSlug))}
+      </article>
+    `;
+  } else {
+    elements.panel.innerHTML = `
+      <article class="topic-card">
+        <p class="topic-kicker">${escapeHtml(topic.focus)}</p>
+        <h2>${escapeHtml(topic.title)}</h2>
+        <p class="summary" data-reading>${escapeHtml(topic.summary)}</p>
+        <ul class="meta-list" aria-label="Métadonnées">
+          <li>${escapeHtml(topic.status)}</li>
+          <li>${topic.concepts.length} notions</li>
+          <li>${escapeHtml(topic.focus)}</li>
+        </ul>
+        ${renderPreamble(topic.preamble)}
+        <section class="overview" aria-label="Objectifs et notions">
+          <div>
+            <h3>Objectifs</h3>
+            <ul>${renderTextList(topic.objectives)}</ul>
+          </div>
+          <div>
+            <h3>Notions</h3>
+            <ul>${topic.concepts.map((concept) => `<li>${escapeHtml(concept.title)}</li>`).join("")}</ul>
+          </div>
+        </section>
+        ${concepts}
+      </article>
+    `;
+  }
 
   window.readingAssist.refresh(document);
   requestAnimationFrame(() => {

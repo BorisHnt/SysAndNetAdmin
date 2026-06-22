@@ -5,6 +5,7 @@ window.NET_PRACTICE_CONCRETE = {
       "Certaines IP et certains masques sont déjà imposés. Il faut compléter les cases libres sans créer de doublon."
     ],
     goal: "Vérifier que tu sais placer deux interfaces dans le même sous-réseau.",
+    networks: ["A ↔ B = premier réseau local", "C ↔ D = second réseau local"],
     rules: [
       "Un switch relie des machines d’un même réseau ; aucune gateway n’est nécessaire ici.",
       "Les deux IP d’une paire doivent produire la même adresse réseau avec le même masque.",
@@ -40,6 +41,7 @@ window.NET_PRACTICE_CONCRETE = {
       "Le premier lien impose un /27 ; le second peut être organisé en petit réseau point à point."
     ],
     goal: "Savoir calculer les limites d’un bloc et choisir une IP voisine valide.",
+    networks: ["A ↔ B = réseau /27", "C ↔ D = petit réseau point à point /30"],
     rules: ["Avec /27, le pas vaut 32.", "Avec /30, chaque bloc contient quatre adresses et seulement deux hôtes utilisables."],
     deductions: [
       {
@@ -64,6 +66,7 @@ window.NET_PRACTICE_CONCRETE = {
   "03": {
     screen: ["Trois PC partagent le même switch.", "Une adresse en /25 sert de point de départ pour compléter les autres."],
     goal: "Comprendre qu’un switch forme un seul réseau partagé.",
+    networks: ["A ↔ switch ↔ B ↔ C = un seul réseau local partagé"],
     rules: ["Toutes les interfaces reliées au switch doivent appartenir au même sous-réseau.", "Un /25 crée les blocs 0-127 et 128-255."],
     deductions: [
       {
@@ -81,6 +84,7 @@ window.NET_PRACTICE_CONCRETE = {
   "04": {
     screen: ["Un PC doit atteindre un autre réseau en passant par un routeur.", "L’interface locale du routeur et le PC doivent d’abord pouvoir se parler directement."],
     goal: "Choisir une gateway locale et distinguer destination finale et prochain saut.",
+    networks: ["A ↔ switch ↔ interface locale du routeur = réseau local", "Autres interfaces du routeur = autres réseaux"],
     rules: ["La gateway doit être dans le même sous-réseau que le PC.", "Le next hop est l’interface voisine du routeur, jamais le PC distant."],
     deductions: [
       {
@@ -105,6 +109,7 @@ window.NET_PRACTICE_CONCRETE = {
   "05": {
     screen: ["Deux LAN sont reliés par un même routeur possédant une interface dans chaque LAN.", "Chaque PC doit connaître sa sortie locale."],
     goal: "Faire communiquer deux réseaux directement connectés au même routeur.",
+    networks: ["A ↔ R1 = LAN de A", "B ↔ R2 = LAN de B"],
     rules: ["Le routeur connaît automatiquement les réseaux de ses interfaces.", "Chaque PC utilise l’interface du routeur située dans son propre LAN."],
     deductions: [
       {
@@ -129,6 +134,7 @@ window.NET_PRACTICE_CONCRETE = {
   "06": {
     screen: ["Un serveur dans un LAN, un routeur à deux interfaces et Internet.", "Il faut construire l’aller vers Internet et surtout la route permettant à la réponse de revenir."],
     goal: "Comprendre la route par défaut et la route de retour.",
+    networks: ["A ↔ switch ↔ R1 = réseau local", "R2 ↔ Internet = réseau externe"],
     rules: ["Chaque gateway est un voisin local.", "Internet doit connaître le réseau situé derrière le routeur.", "Une route par défaut couvre toute destination non connue."],
     deductions: [
       {
@@ -167,12 +173,13 @@ window.NET_PRACTICE_CONCRETE = {
   "07": {
     screen: ["Deux PC sont séparés par deux routeurs.", "Chaque câble constitue un sous-réseau distinct : LAN gauche, transit entre routeurs, LAN droit."],
     goal: "Découper proprement trois liens et installer les routes de bout en bout.",
+    networks: ["A ↔ R1 = LAN gauche", "R1 ↔ R2 = réseau de transit", "R2 ↔ C = LAN droit"],
     rules: ["Deux interfaces reliées par un câble doivent partager un réseau.", "Deux câbles différents ne doivent pas partager le même sous-réseau.", "Un /30 est pratique pour un lien à deux interfaces."],
     deductions: [
       {
-        look: "R1 côté A se termine par .1.",
-        meaning: "On peut construire un /30 contenant .1.",
-        deduction: "Le bloc .0-.3 contient les hôtes .1 et .2.",
+        look: "R1 côté A vaut 96.198.14.1.",
+        meaning: "On cherche un petit réseau /30 contenant 96.198.14.1.",
+        deduction: "Le bloc 96.198.14.0 à 96.198.14.3 contient les hôtes .1 et .2.",
         value: "R1 = 96.198.14.1/30 ; A = 96.198.14.2/30.",
         why: "Les deux interfaces occupent les deux hôtes du lien."
       },
@@ -198,6 +205,7 @@ window.NET_PRACTICE_CONCRETE = {
   "08": {
     screen: ["Deux LAN se trouvent derrière R2, puis R1 relie l’ensemble à Internet.", "Internet fournit une route résumée couvrant une plage de 64 adresses."],
     goal: "Découper une plage en sous-réseaux puis annoncer l’ensemble avec une route agrégée.",
+    networks: ["C ↔ R2 = premier LAN", "D ↔ R2 = second LAN", "R2 ↔ R1 = transit", "R1 ↔ Internet = réseau externe"],
     rules: ["Un /26 couvre 64 adresses.", "Les sous-réseaux internes doivent rester à l’intérieur de cette plage.", "R1 peut annoncer le /26 entier au lieu d’une route par LAN."],
     deductions: [
       {
@@ -229,6 +237,7 @@ window.NET_PRACTICE_CONCRETE = {
   "09": {
     screen: ["Plusieurs réseaux et plusieurs routeurs forment une topologie ramifiée.", "Certaines routes sont trop précises, inutiles ou pointent vers un mauvais voisin."],
     goal: "Lire une table de routage et vérifier chaque chemin, y compris le retour.",
+    networks: ["A et B ↔ switch ↔ R1 = LAN partagé", "R1 ↔ R2 = transit", "R2 ↔ C et D = réseaux distants", "R1 ↔ Internet = réseau externe"],
     rules: ["Une route ne sert que si sa destination couvre l’IP recherchée.", "Le next hop doit être voisin.", "La route la plus spécifique gagne sur la route par défaut."],
     deductions: [
       {
@@ -260,6 +269,7 @@ window.NET_PRACTICE_CONCRETE = {
   "10": {
     screen: ["La topologie complète combine plusieurs LAN, des transits, Internet et des routes statiques.", "C’est une synthèse : adressage, masques, gateways, agrégation et retour."],
     goal: "Construire un plan cohérent de bout en bout et le prouver par le trajet des paquets.",
+    networks: ["H1 et H2 ↔ switch ↔ R1 = LAN principal", "R1 ↔ R2 = transit", "R2 ↔ H3 et H4 = LAN distants", "R1 ↔ Internet = réseau externe"],
     rules: ["Commencer par dessiner un sous-réseau par câble ou LAN.", "Configurer les interfaces avant les routes.", "Ajouter les routes du plus local vers le plus lointain.", "Toujours terminer par le chemin retour."],
     deductions: [
       {

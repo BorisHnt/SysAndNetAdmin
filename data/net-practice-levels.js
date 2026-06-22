@@ -361,22 +361,22 @@ window.NET_PRACTICE_LEVELS = [
       ]
     ],
     principle: [
-      "Internet possède une route fixe vers un préfixe P.Q.R.0/26.",
+      "Internet possède une route vers le préfixe concret 72.44.18.0/26.",
       "Toutes les adresses internes doivent donc pouvoir être regroupées dans ce /26.",
       "Il faut découper ce bloc en LAN C, LAN D et lien de transit R1-R2 sans chevauchement.",
       "R1 annonce l’agrégat vers R2 et Internet annonce le même agrégat vers R1."
     ],
     method: [
-      "Réserve P.Q.R.0/28 pour C : R2 = .1, C = .2.",
-      "Réserve P.Q.R.16/28 pour D : R2 = .17, D = .18.",
-      "Réserve P.Q.R.60/30 pour le transit : R2 = .61, R1 = .62.",
-      "Sur R1, route P.Q.R.0/26 via .61 ; sur R2, route par défaut via .62.",
-      "Sur Internet, garde P.Q.R.0/26 et utilise l’IP publique de R1 comme gateway."
+      "Réserve 72.44.18.0/28 pour C : R2 = .1, C = .2.",
+      "Réserve 72.44.18.16/28 pour D : R2 = .17, D = .18.",
+      "Réserve 72.44.18.60/30 pour le transit : R2 = .61, R1 = .62.",
+      "Sur R1, route 72.44.18.0/26 via 72.44.18.61 ; sur R2, route par défaut via 72.44.18.62.",
+      "Sur Internet, garde 72.44.18.0/26 et utilise l’IP publique de R1 comme gateway."
     ],
     example:
-      "C = P.Q.R.2/28 -> gateway P.Q.R.1\nD = P.Q.R.18/28 -> gateway P.Q.R.17\nR2-R1 = P.Q.R.61/30 <-> P.Q.R.62/30\nR1: P.Q.R.0/26 via P.Q.R.61\nR2: default via P.Q.R.62\nInternet: P.Q.R.0/26 via 163.A.250.12",
+      "C = 72.44.18.2/28 -> gateway 72.44.18.1\nD = 72.44.18.18/28 -> gateway 72.44.18.17\nR2-R1 = 72.44.18.61/30 <-> 72.44.18.62/30\nR1: 72.44.18.0/26 via 72.44.18.61\nR2: default via 72.44.18.62\nInternet: 72.44.18.0/26 via 163.90.250.12",
     why: [
-      "Les trois sous-réseaux tiennent dans P.Q.R.0-.63.",
+      "Les trois sous-réseaux tiennent dans 72.44.18.0 à 72.44.18.63.",
       "R1 résume tous les réseaux internes par une seule route /26.",
       "Internet peut répondre à C et D avec une route unique."
     ],

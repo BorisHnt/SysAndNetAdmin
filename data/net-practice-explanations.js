@@ -382,7 +382,7 @@ window.NET_PRACTICE_EXPLANATIONS = {
   "08": {
     title: "Découper un préfixe annoncé en plusieurs sous-réseaux",
     intro: [
-      "Le niveau fournit un indice très fort : Internet sait joindre P.Q.R.0/26. Cela signifie que les réseaux internes accessibles depuis Internet doivent rester à l’intérieur de P.Q.R.0 à P.Q.R.63.",
+      "Le niveau fournit un indice très fort : Internet sait joindre 72.44.18.0/26. Les réseaux internes accessibles depuis Internet doivent donc rester entre 72.44.18.0 et 72.44.18.63.",
       "Il faut réaliser un plan VLSM : plusieurs sous-réseaux de tailles différentes, sans chevauchement, tous contenus dans le même agrégat."
     ],
     observations: [
@@ -395,34 +395,34 @@ window.NET_PRACTICE_EXPLANATIONS = {
       {
         title: "Visualiser l’espace disponible",
         body: [
-          "P.Q.R.0/26 contient 64 adresses : .0 à .63.",
+          "72.44.18.0/26 contient 64 adresses : 72.44.18.0 à 72.44.18.63.",
           "Il faut y placer deux LAN et un transit. Une répartition possible est /28, /28 et /30."
         ],
-        code: "Agrégat : P.Q.R.0/26\nDisponible : .0 -> .63\nBesoin : LAN C + LAN D + transit"
+        code: "Agrégat : 72.44.18.0/26\nDisponible : 72.44.18.0 -> 72.44.18.63\nBesoin : LAN C + LAN D + transit"
       },
       {
         title: "Réserver les deux LAN",
         body: [
-          "P.Q.R.0/28 couvre .0-.15, avec .1-.14 utilisables.",
-          "P.Q.R.16/28 couvre .16-.31, avec .17-.30 utilisables. Ces deux blocs sont distincts."
+          "72.44.18.0/28 couvre .0-.15, avec .1-.14 utilisables.",
+          "72.44.18.16/28 couvre .16-.31, avec .17-.30 utilisables. Ces deux blocs sont distincts."
         ],
-        code: "LAN C : P.Q.R.0/28, R2=.1, C=.2\nLAN D : P.Q.R.16/28, R2=.17, D=.18"
+        code: "LAN C : 72.44.18.0/28, R2=.1, C=.2\nLAN D : 72.44.18.16/28, R2=.17, D=.18"
       },
       {
         title: "Placer le transit R1-R2",
         body: [
-          "Le bloc P.Q.R.60/30 utilise .60-.63 et reste dans le /26.",
+          "Le bloc 72.44.18.60/30 utilise .60-.63 et reste dans le /26.",
           "La gateway fixe de certaines routes permet de déduire quelle extrémité doit recevoir .61 ou .62."
         ],
-        code: "Transit : P.Q.R.60/30\nR2 : P.Q.R.61\nR1 : P.Q.R.62"
+        code: "Transit : 72.44.18.60/30\nR2 : 72.44.18.61\nR1 : 72.44.18.62"
       },
       {
         title: "Configurer l’agrégation et les routes",
         body: [
-          "R1 n’a pas besoin d’une route par LAN : il peut envoyer tout P.Q.R.0/26 vers R2.",
+          "R1 n’a pas besoin d’une route par LAN : il peut envoyer tout 72.44.18.0/26 vers R2.",
           "R2 utilise R1 comme route par défaut. Internet utilise l’interface publique de R1 pour tout le /26."
         ],
-        code: "R1 : P.Q.R.0/26 via P.Q.R.61\nR2 : default via P.Q.R.62\nInternet : P.Q.R.0/26 via 163.A.250.12"
+        code: "R1 : 72.44.18.0/26 via 72.44.18.61\nR2 : default via 72.44.18.62\nInternet : 72.44.18.0/26 via 163.90.250.12"
       }
     ],
     packet: [
@@ -430,7 +430,7 @@ window.NET_PRACTICE_EXPLANATIONS = {
       "Pour Internet, C envoie à R2, R2 applique sa route par défaut vers R1, puis R1 envoie sur son lien public.",
       "Internet répond grâce à la route agrégée /26 vers R1. R1 transmet l’agrégat à R2, qui choisit finalement le LAN précis."
     ],
-    packetTrace: "C -> R2 -> D\nC -> R2 -> R1 -> Internet\nInternet -> R1 grâce à P.Q.R.0/26\nR1 -> R2 grâce à P.Q.R.0/26\nR2 -> LAN C ou LAN D",
+    packetTrace: "C -> R2 -> D\nC -> R2 -> R1 -> Internet\nInternet -> R1 grâce à 72.44.18.0/26\nR1 -> R2 grâce à 72.44.18.0/26\nR2 -> LAN C ou LAN D",
     verification: [
       "Tous les sous-réseaux sont-ils inclus dans .0-.63 ?",
       "Les deux LAN et le transit se chevauchent-ils ?",
