@@ -1174,11 +1174,13 @@ code {
   z-index: 2;
   transform: translate(-50%, -50%);
   display: grid;
-  grid-template-columns: 2.35rem minmax(5.2rem, auto);
+  grid-template-columns: 2.35rem minmax(0, 1fr);
   grid-template-rows: auto auto auto;
   column-gap: 0.55rem;
   align-items: center;
-  min-width: 9rem;
+  width: 15rem;
+  min-width: 15rem;
+  max-width: 15rem;
   border: 2px solid var(--line-strong);
   border-radius: 4px;
   background: var(--surface);
