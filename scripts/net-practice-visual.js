@@ -78,18 +78,23 @@ function renderTabs() {
 
 function renderNode(node) {
   const details = detailsByLevel[state.levelNumber]?.[node.id] || {};
+  const askedIps = new Set(details.askedIps || []);
   const interfaces = (details.interfaces || [])
-    .map(
-      ([name, ip, mask]) => `
+    .map(([name, ip, mask]) => {
+      const ipIsAsked = askedIps.has(name);
+      return `
         <div class="visual-interface">
           <b style="--subnet-color:${findSubnetForInterface(name)}">
             <span class="subnet-dot"></span>${escapeHtml(name)}
           </b>
-          <span>${escapeHtml(ip)}</span>
+          <span
+            class="${ipIsAsked ? "visual-value-asked" : ""}"
+            title="${ipIsAsked ? "IP à saisir dans NetPractice" : "IP déjà donnée dans NetPractice"}"
+          >${escapeHtml(ip)}${ipIsAsked ? " <small>à saisir</small>" : ""}</span>
           <span>${escapeHtml(mask)}</span>
         </div>
-      `,
-    )
+      `;
+    })
     .join("");
   const routes = (details.routes || [])
     .map(

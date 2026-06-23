@@ -368,6 +368,22 @@ a:focus-visible,
   color: var(--accent-dark);
 }
 
+.visual-interface .visual-value-asked {
+  border: 1px solid #69ad68;
+  background: #dff6dc;
+  padding: 0.05rem 0.18rem;
+  color: #143f1a;
+  font-weight: 800;
+  justify-self: start;
+}
+
+.visual-interface .visual-value-asked small {
+  color: #2f6f36;
+  font-size: 0.5rem;
+  font-weight: 800;
+  text-transform: uppercase;
+}
+
 .subnet-dot {
   width: 0.55rem;
   height: 0.55rem;
