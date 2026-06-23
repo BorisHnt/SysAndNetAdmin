@@ -647,17 +647,24 @@ function renderConcreteWalkthrough(level) {
       `,
     )
     .join("");
-  const beginnerFocus = guide.beginnerFocus
-    ? `
-      <section class="beginner-focus">
-        <p class="topic-kicker">Explication pure débutant</p>
-        <h5>${escapeHtml(guide.beginnerFocus.title)}</h5>
-        <p data-reading>${escapeHtml(guide.beginnerFocus.intro)}</p>
-        <ol>${renderTextList(guide.beginnerFocus.steps)}</ol>
-        <pre><code>${escapeHtml(guide.beginnerFocus.result)}</code></pre>
-      </section>
-    `
-    : "";
+  const beginnerExplanations = Array.isArray(guide.beginnerFocus)
+    ? guide.beginnerFocus
+    : guide.beginnerFocus
+      ? [guide.beginnerFocus]
+      : [];
+  const beginnerFocus = beginnerExplanations
+    .map(
+      (focus) => `
+        <section class="beginner-focus">
+          <p class="topic-kicker">Explication pure débutant</p>
+          <h5>${escapeHtml(focus.title)}</h5>
+          <p data-reading>${escapeHtml(focus.intro)}</p>
+          <ol>${renderTextList(focus.steps)}</ol>
+          <pre><code>${escapeHtml(focus.result)}</code></pre>
+        </section>
+      `,
+    )
+    .join("");
 
   return `
     <section class="concrete-walkthrough" aria-label="Résolution concrète du niveau ${escapeHtml(level.number)}">

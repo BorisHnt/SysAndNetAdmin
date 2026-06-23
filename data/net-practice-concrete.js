@@ -27,6 +27,29 @@ window.NET_PRACTICE_CONCRETE = {
         why: "L’adresse est différente de C et appartient au réseau 211.191.0.0/16."
       }
     ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi /24 entre A1 et B1 ?",
+        intro: "Le masque doit placer A et B dans le même quartier réseau, puisqu’ils sont reliés directement.",
+        steps: [
+          "Un /24 conserve les trois premiers nombres pour identifier le réseau.",
+          "104.97.23.42/24 et 104.97.23.12/24 donnent tous les deux le réseau 104.97.23.0/24.",
+          "La plage va de .0 à .255. .0 est le réseau, .255 le broadcast, et .1 à .254 sont utilisables.",
+          "Aucune gateway n’est nécessaire : le paquet reste sur ce câble."
+        ],
+        result: "A1 : 104.97.23.42/24\nB1 : 104.97.23.12/24\nRéseau commun : 104.97.23.0/24"
+      },
+      {
+        title: "Pourquoi /16 entre C1 et D1 ?",
+        intro: "Ici, seuls les deux premiers nombres définissent le quartier.",
+        steps: [
+          "Avec /16, le réseau est 211.191.0.0/16.",
+          "Les troisième et quatrième nombres servent à distinguer les machines.",
+          "211.191.37.75 et 211.191.80.42 sont donc voisines malgré leurs deux derniers nombres différents."
+        ],
+        result: "C1 : 211.191.37.75/16\nD1 : 211.191.80.42/16\nRéseau commun : 211.191.0.0/16"
+      }
+    ],
     solution: "A 104.97.23.42/24 <-> B 104.97.23.12/24\nC 211.191.37.75/16 <-> D 211.191.80.42/16",
     packet: [
       "A compare l’IP de B avec son /24 et constate que B est local.",
@@ -59,6 +82,30 @@ window.NET_PRACTICE_CONCRETE = {
         why: "Les deux seules adresses utilisables sont placées sur les deux extrémités du câble."
       }
     ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi /27 pour A1 et B1 ?",
+        intro: "Le /27 découpe le dernier nombre en blocs de 32 adresses.",
+        steps: [
+          "Les blocs commencent à 0, 32, 64, 96, 128, 160, 192 et 224.",
+          "L’adresse .222 tombe dans le bloc .192-.223.",
+          ".192 est le réseau et .223 le broadcast.",
+          "A1 et B1 doivent donc utiliser deux adresses différentes entre .193 et .222."
+        ],
+        result: "Réseau : 192.168.84.192/27\nA1 : 192.168.84.193\nB1 : 192.168.84.222"
+      },
+      {
+        title: "Pourquoi /30 pour le lien C1-D1 ?",
+        intro: "Ce câble ne relie que deux interfaces. Un /30 fournit exactement deux places utilisables.",
+        steps: [
+          "Un /30 contient quatre adresses.",
+          "Dans 10.10.10.0/30, .0 est le réseau et .3 le broadcast.",
+          "Il reste exactement .1 et .2 pour C1 et D1.",
+          "Un réseau plus grand fonctionnerait, mais réserverait inutilement davantage d’adresses."
+        ],
+        result: "Réseau : 10.10.10.0/30\nC1 : 10.10.10.1\nD1 : 10.10.10.2"
+      }
+    ],
     solution: "A 192.168.84.193/27 <-> B 192.168.84.222/27\nC 10.10.10.1/30 <-> D 10.10.10.2/30",
     packet: ["Chaque PC reconnaît l’autre comme local.", "Le paquet traverse directement le câble, sans consulter de routeur."],
     traps: ["Croire qu’un /27 commence toujours à .0.", "Utiliser .192 ou .223 comme IP hôte.", "Placer les deux côtés d’un lien dans deux /30 différents."]
@@ -75,6 +122,19 @@ window.NET_PRACTICE_CONCRETE = {
         deduction: "Réseau .0, hôtes .1-.126, broadcast .127.",
         value: "PC B = 104.198.73.42/25 ; PC C = 104.198.73.126/25.",
         why: "Les deux adresses sont libres et restent entre .1 et .126."
+      }
+    ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi les trois machines utilisent /25 ?",
+        intro: "Le switch forme une rue commune. Toutes les machines branchées dessus doivent voir le même quartier.",
+        steps: [
+          "Un /25 crée deux blocs : .0-.127 et .128-.255.",
+          "A1 vaut .125 : il se trouve dans le premier bloc.",
+          "B1 et C1 doivent donc rester entre .1 et .126.",
+          "Le switch ne change pas de réseau et n’a pas besoin d’une IP pour transmettre les trames."
+        ],
+        result: "Réseau commun : 104.198.73.0/25\nA1 : .125\nB1 : .42\nC1 : .126"
       }
     ],
     solution: "A 104.198.73.125/25\nB 104.198.73.42/25\nC 104.198.73.126/25",
@@ -102,6 +162,20 @@ window.NET_PRACTICE_CONCRETE = {
         why: "A peut joindre .129 directement et lui confier toutes les destinations inconnues."
       }
     ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi /28 autour de l’adresse .132 ?",
+        intro: "Le /28 crée des quartiers de 16 adresses. Il permet d’isoler proprement ce LAN des autres interfaces du routeur.",
+        steps: [
+          "Les blocs /28 commencent à .0, .16, .32, .48, etc.",
+          ".132 tombe entre .128 et .143.",
+          ".128 est le réseau et .143 le broadcast.",
+          "A1, B1 et R1 doivent donc utiliser des adresses différentes entre .129 et .142.",
+          "Un masque beaucoup plus large risquerait de faire chevaucher ce LAN avec un autre réseau du même routeur."
+        ],
+        result: "Réseau : 72.44.18.128/28\nR1 : 72.44.18.129\nB1 : 72.44.18.130\nA1 : 72.44.18.132"
+      }
+    ],
     solution: "A = 72.44.18.132/28\nR1 = 72.44.18.129/28\nRoute A = 0.0.0.0/0 via 72.44.18.129",
     packet: ["A voit que la destination n’est pas locale.", "A envoie au routeur .129.", "Le routeur poursuit selon sa propre table de routage."],
     traps: ["Mettre comme gateway une IP du réseau distant.", "Utiliser .128 ou .143.", "Confondre le réseau de destination et la gateway."]
@@ -125,6 +199,19 @@ window.NET_PRACTICE_CONCRETE = {
         deduction: "Le réseau est 150.70.128.0/18.",
         value: "B = 150.70.130.10/18 ; gateway = 150.70.130.254.",
         why: "B partage le /18 de R2 et peut lui remettre les réponses."
+      }
+    ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi A1 utilise /25 et B1 utilise /18 ?",
+        intro: "Chaque machine doit reprendre le quartier de l’interface du routeur placée devant elle. Les deux côtés du routeur sont deux réseaux différents.",
+        steps: [
+          "R1 vaut 42.50.60.126/25. A1 doit donc être dans 42.50.60.0-.127.",
+          "R2 vaut 150.70.130.254/18. Avec /18, le troisième nombre avance par blocs de 64.",
+          "130 tombe dans le bloc 128-191 : le réseau de B est 150.70.128.0/18.",
+          "A utilise R1 comme gateway. B utilise R2. Une machine ne choisit jamais l’interface située de l’autre côté du routeur."
+        ],
+        result: "LAN A : 42.50.60.0/25\nA1 .10 -> R1 .126\n\nLAN B : 150.70.128.0/18\nB1 150.70.130.10 -> R2 150.70.130.254"
       }
     ],
     solution: "A 42.50.60.10/25 -> gateway 42.50.60.126\nB 150.70.130.10/18 -> gateway 150.70.130.254",
@@ -166,6 +253,30 @@ window.NET_PRACTICE_CONCRETE = {
         why: "163.172.250.12 est le voisin Internet qui connaît directement le LAN."
       }
     ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi /25 entre A1 et R1 ?",
+        intro: "A1 et R1 sont sur le même LAN. Leur mask doit placer .227 et .254 dans le même quartier.",
+        steps: [
+          "Un /25 crée les blocs .0-.127 et .128-.255.",
+          ".227 et .254 appartiennent tous les deux au second bloc.",
+          ".128 est le réseau et .255 le broadcast.",
+          "A1 .227 et R1 .254 sont donc deux adresses hôtes valides du réseau .128/25."
+        ],
+        result: "LAN : 28.141.155.128/25\nA1 : 28.141.155.227\nR1 : 28.141.155.254"
+      },
+      {
+        title: "Pourquoi /28 entre R2 et Internet ?",
+        intro: "Le lien public fourni par l’exercice appartient déjà au réseau 163.172.250.0/28.",
+        steps: [
+          "Un /28 contient 16 adresses : .0 à .15.",
+          ".0 est le réseau et .15 le broadcast.",
+          "Internet I1 = .1 et le routeur R2 = .12 sont deux hôtes valides de ce même lien.",
+          "Le routeur peut donc remettre directement ses paquets au voisin Internet .1."
+        ],
+        result: "Lien public : 163.172.250.0/28\nInternet I1 : 163.172.250.1\nRouteur R2 : 163.172.250.12"
+      }
+    ],
     solution: "A1\nIP : 28.141.155.227\nMask : 255.255.255.128 (/25)\n\nR1\nIP : 28.141.155.254\nMask : 255.255.255.128 (/25)\n\nRoute de A\n0.0.0.0/0 => 28.141.155.254\n\nR2\nIP : 163.172.250.12\nMask : 255.255.255.240 (/28)\n\nRoute du routeur\n0.0.0.0/0 => 163.172.250.1\n\nRoute d’Internet\n28.141.155.128/25 => 163.172.250.12",
     packet: ["A remet le paquet à 28.141.155.254.", "Le routeur le remet au voisin Internet 163.172.250.1.", "Internet traite la destination extérieure.", "La réponse suit la route 28.141.155.128/25 via 163.172.250.12.", "Le routeur livre enfin le paquet à A sur son LAN."],
     traps: ["Oublier la route de retour.", "Mettre la destination Internet comme gateway.", "Donner à Internet une route vers une seule IP au lieu du /25 complet."]
@@ -196,6 +307,20 @@ window.NET_PRACTICE_CONCRETE = {
         deduction: "Le bloc 96.198.15.0/30 est indépendant des deux précédents.",
         value: "R2 = 96.198.15.1/30 ; C = 96.198.15.2/30.",
         why: "R2 et C partagent ce troisième réseau sans chevauchement."
+      }
+    ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi utiliser /30 sur chacun des trois câbles ?",
+        intro: "Chaque câble ne relie que deux interfaces. Un petit quartier de deux places utilisables suffit.",
+        steps: [
+          "Un /30 contient quatre adresses : réseau, deux hôtes, broadcast.",
+          "Le câble A1-R11 utilise .0-.3 : .1 et .2 sont les deux hôtes.",
+          "Le câble R12-R21 utilise .252-.255 : .253 et .254 sont les deux hôtes.",
+          "Le câble R22-C1 utilise un autre bloc, 96.198.15.0-.3 : .1 et .2 sont utilisables.",
+          "Les trois câbles ont des blocs différents, donc les routeurs savent par quelle interface sortir."
+        ],
+        result: "A1-R11 : 96.198.14.0/30\nR12-R21 : 96.198.14.252/30\nR22-C1 : 96.198.15.0/30"
       }
     ],
     solution: "A 96.198.14.2/30 <-> R1 96.198.14.1/30\nR1 96.198.14.254/30 <-> R2 96.198.14.253/30\nR2 96.198.15.1/30 <-> C 96.198.15.2/30\nA default via 96.198.14.1\nR1 route 96.198.15.0/30 via 96.198.14.253\nR2 route 96.198.14.0/30 via 96.198.14.254\nC default via 96.198.15.1",
@@ -230,22 +355,40 @@ window.NET_PRACTICE_CONCRETE = {
         why: "R1 envoie tout le bloc interne à R2, et R2 envoie l’extérieur à R1."
       }
     ],
-    beginnerFocus: {
-      title: "Pourquoi R22 = .17 et C1 = .18, et pas .3 et .4 ?",
-      intro:
-        "Parce que chaque câble qui part du routeur doit représenter un quartier réseau différent. On ne choisit pas les nombres simplement parce qu’ils se suivent.",
-      steps: [
-        "Avec /28, chaque quartier contient 16 adresses.",
-        "Le premier quartier va de 146.29.78.0 à 146.29.78.15. .0 est le réseau, .15 est le broadcast, et .1 à .14 sont utilisables.",
-        "R23 = 146.29.78.1 et D1 = 146.29.78.2 utilisent déjà ce premier quartier.",
-        ".3 et .4 appartiennent encore au même quartier .0-.15. Les utiliser pour R22 et C1 mélangerait deux câbles différents dans le même réseau.",
-        "Le quartier /28 suivant commence à 146.29.78.16 et finit à 146.29.78.31.",
-        ".16 est l’adresse réseau et .31 le broadcast. Les premières IP utilisables sont donc .17 et .18.",
-        "On place R22 en .17 et C1 en .18. Ce choix est facile à lire, mais .20 et .29 auraient aussi fonctionné s’ils étaient libres."
-      ],
-      result:
-        "LAN domicile : 146.29.78.0/28\nR23 = 146.29.78.1\nD1 = 146.29.78.2\n\nLAN bureau : 146.29.78.16/28\nR22 = 146.29.78.17\nC1 = 146.29.78.18"
-    },
+    beginnerFocus: [
+      {
+        title: "Pourquoi R22 = .17 et C1 = .18, et pas .3 et .4 ?",
+        intro:
+          "Parce que chaque câble qui part du routeur doit représenter un quartier réseau différent. On ne choisit pas les nombres simplement parce qu’ils se suivent.",
+        steps: [
+          "Avec /28, chaque quartier contient 16 adresses.",
+          "Le premier quartier va de 146.29.78.0 à 146.29.78.15. .0 est le réseau, .15 est le broadcast, et .1 à .14 sont utilisables.",
+          "R23 = 146.29.78.1 et D1 = 146.29.78.2 utilisent déjà ce premier quartier.",
+          ".3 et .4 appartiennent encore au même quartier .0-.15. Les utiliser pour R22 et C1 mélangerait deux câbles différents dans le même réseau.",
+          "Le quartier /28 suivant commence à 146.29.78.16 et finit à 146.29.78.31.",
+          ".16 est l’adresse réseau et .31 le broadcast. Les premières IP utilisables sont donc .17 et .18.",
+          "On place R22 en .17 et C1 en .18. Ce choix est facile à lire, mais .20 et .29 auraient aussi fonctionné s’ils étaient libres."
+        ],
+        result:
+          "LAN domicile : 146.29.78.0/28\nR23 = 146.29.78.1\nD1 = 146.29.78.2\n\nLAN bureau : 146.29.78.16/28\nR22 = 146.29.78.17\nC1 = 146.29.78.18"
+      },
+      {
+        title: "Pourquoi /30 entre R13 et R21 ?",
+        intro:
+          "Ce câble sert uniquement de passage entre deux routeurs. Il n’a besoin que de deux adresses, une à chaque extrémité.",
+        steps: [
+          "Un /30 contient quatre adresses.",
+          "Le bloc choisi est 146.29.78.60 à 146.29.78.63.",
+          ".60 est l’adresse réseau : elle nomme le quartier et ne peut pas être attribuée.",
+          ".63 est le broadcast : elle ne peut pas être attribuée non plus.",
+          "Il reste exactement .61 et .62 pour les deux interfaces du câble.",
+          "R21 prend .61 et R13 prend .62. Elles peuvent donc se parler directement.",
+          "Le /30 évite de gaspiller un bloc /28 de 16 adresses pour un câble qui ne relie que deux interfaces."
+        ],
+        result:
+          "Transit : 146.29.78.60/30\nR21 : 146.29.78.61/30\nR13 : 146.29.78.62/30\nBroadcast : 146.29.78.63"
+      }
+    ],
     solution: "D1 146.29.78.2/28 -> R23 146.29.78.1\nC1 146.29.78.18/28 -> R22 146.29.78.17\nR21 146.29.78.61/30 <-> R13 146.29.78.62/30\nR1 : 146.29.78.0/26 via 146.29.78.61\nR2 : default via 146.29.78.62\nInternet : 146.29.78.0/26 via 163.228.250.12",
     packet: ["C vers D : C -> R2 -> D.", "C vers Internet : C -> R2 -> R1 -> Internet.", "Retour : Internet -> R1 grâce au /26, puis R1 -> R2, puis R2 choisit le bon LAN."],
     traps: ["Créer un sous-réseau hors de .0-.63.", "Faire chevaucher les deux /28.", "Annoncer une gateway qui n’est pas voisine."]
@@ -278,6 +421,31 @@ window.NET_PRACTICE_CONCRETE = {
         why: "Chaque route désigne le réseau distant et le routeur voisin qui y conduit."
       }
     ],
+    beginnerFocus: [
+      {
+        title: "Pourquoi /30 entre R13 et R21 ?",
+        intro: "Le transit relie uniquement R1 et R2. Deux adresses utilisables suffisent.",
+        steps: [
+          "Le bloc 70.50.17.252/30 contient .252, .253, .254 et .255.",
+          ".252 est le réseau et .255 le broadcast.",
+          ".253 et .254 sont les deux seules IP utilisables.",
+          "R1 utilise .253 et R2 .254.",
+          "Les LAN de A/B, C et D utilisent d’autres blocs et ne se mélangent pas avec ce transit."
+        ],
+        result: "Transit : 70.50.17.252/30\nR13 : 70.50.17.253\nR21 : 70.50.17.254"
+      },
+      {
+        title: "Pourquoi /25 pour le LAN de A et B ?",
+        intro: "A, B et l’interface R11 sont reliés par le même switch : ils doivent partager un seul quartier.",
+        steps: [
+          "Un /25 couvre 128 adresses, ici 80.198.40.0 à 80.198.40.127.",
+          ".0 est le réseau et .127 le broadcast.",
+          "A .10, B .20 et R11 .126 sont trois adresses utilisables du même bloc.",
+          "A et B peuvent atteindre directement leur gateway .126."
+        ],
+        result: "LAN A/B : 80.198.40.0/25\nA1 : .10\nB1 : .20\nR11 : .126"
+      }
+    ],
     solution: "LAN A/B : 80.198.40.0/25, gateway 80.198.40.126\nTransit : R1 70.50.17.253/30 <-> R2 70.50.17.254/30\nLAN C : 70.50.18.0/24, gateway 70.50.18.254\nR1 route 70.50.18.0/24 via 70.50.17.254\nR2 route 80.198.40.0/25 via 70.50.17.253",
     packet: ["A remet le paquet à sa gateway.", "R1 applique la route vers 70.50.18.0/24 et remet à R2.", "R2 livre à C.", "C répond à R2, qui applique sa route de retour vers 80.198.40.0/25."],
     traps: ["Tester seulement l’aller.", "Laisser une route qui couvre une mauvaise plage.", "Confondre interface de sortie et destination finale."]
@@ -289,17 +457,17 @@ window.NET_PRACTICE_CONCRETE = {
     rules: ["Commencer par dessiner un sous-réseau par câble ou LAN.", "Configurer les interfaces avant les routes.", "Ajouter les routes du plus local vers le plus lointain.", "Toujours terminer par le chemin retour."],
     deductions: [
       {
-        look: "Deux LAN internes doivent tenir dans 80.50.40.0/24.",
-        meaning: "Le /24 peut être découpé en plusieurs blocs distincts.",
-        deduction: "On réserve 80.50.40.0/26 pour le LAN A et 80.50.40.64/26 pour le LAN B.",
-        value: "LAN A : routeur .1, A .10 ; LAN B : routeur .65, B .70.",
-        why: "Les blocs .0-.63 et .64-.127 ne se chevauchent pas."
+        look: "Toutes les adresses internes doivent tenir dans 80.50.40.0/24.",
+        meaning: "Le /24 peut être découpé en plusieurs quartiers de tailles différentes.",
+        deduction: "On réserve .0/25 au LAN H1-H2, .128/26 à H4, .192/27 à H3 et .252/30 au transit.",
+        value: "Chaque câble reçoit un bloc distinct, sans chevauchement.",
+        why: "Les blocs sont assez grands pour leurs équipements et restent tous contenus dans le /24 annoncé à Internet."
       },
       {
         look: "Les routeurs ont besoin d’un lien de transit.",
         meaning: "Deux interfaces suffisent sur ce lien.",
         deduction: "Un /30 séparé est adapté.",
-        value: "Transit 80.50.40.252/30 : R1 .253, R2 .254.",
+        value: "Transit 80.50.40.252/30 : R2 .253, R1 .254.",
         why: "Les adresses .253 et .254 sont les deux hôtes du bloc."
       },
       {
@@ -310,7 +478,33 @@ window.NET_PRACTICE_CONCRETE = {
         why: "Le /24 couvre les deux /26 internes et permet à R1 de distribuer ensuite le trafic."
       }
     ],
-    solution: "LAN A 80.50.40.0/26 : R2 .1, A .10\nLAN B 80.50.40.64/26 : R2 .65, B .70\nTransit 80.50.40.252/30 : R1 .253, R2 .254\nR2 default via 80.50.40.253\nR1 routes internes via 80.50.40.254\nR1 default via le voisin Internet\nInternet retour 80.50.40.0/24 via l’IP publique de R1",
+    beginnerFocus: [
+      {
+        title: "Pourquoi quatre masks différents dans le même niveau ?",
+        intro: "Chaque câble a un nombre d’équipements différent. On choisit donc un quartier assez grand, mais sans le faire chevaucher avec le suivant.",
+        steps: [
+          "Le LAN H1-H2-R11 contient trois interfaces : 80.50.40.0/25 fournit largement assez de places.",
+          "Le LAN H4-R23 utilise 80.50.40.128/26 : .128-.191.",
+          "Le LAN H3-R22 utilise 80.50.40.192/27 : .192-.223.",
+          "Le transit R13-R21 ne relie que deux interfaces : 80.50.40.252/30 suffit.",
+          "Tous ces blocs sont différents et restent dans l’agrégat 80.50.40.0/24."
+        ],
+        result: "H1/H2/R11 : 80.50.40.0/25\nH4/R23 : 80.50.40.128/26\nH3/R22 : 80.50.40.192/27\nR1/R2 : 80.50.40.252/30"
+      },
+      {
+        title: "Pourquoi .253 et .254 sur le transit /30 ?",
+        intro: "Le dernier bloc /30 du /24 commence à .252.",
+        steps: [
+          "80.50.40.252/30 couvre .252 à .255.",
+          ".252 est le réseau et .255 le broadcast.",
+          ".253 et .254 sont les deux seules IP utilisables.",
+          "R21 prend .253 et R13 .254.",
+          "R2 utilise ensuite .254 comme prochain voisin pour sa route par défaut."
+        ],
+        result: "Transit : 80.50.40.252/30\nR21 : 80.50.40.253\nR13 : 80.50.40.254"
+      }
+    ],
+    solution: "LAN H1/H2 : 80.50.40.0/25, R11 .1\nLAN H4 : 80.50.40.128/26, R23 .129, H41 .131\nLAN H3 : 80.50.40.192/27, R22 .193, H31 .194\nTransit : R21 .253/30 <-> R13 .254/30\nR2 default via 80.50.40.254\nR1 routes internes via 80.50.40.253\nR1 default via le voisin Internet\nInternet retour 80.50.40.0/24 via l’IP publique de R1",
     packet: ["A -> gateway R2.", "R2 -> R1 par le transit.", "R1 -> Internet par son lien public.", "Internet -> R1 grâce à la route de retour.", "R1 -> R2 grâce à la route interne.", "R2 -> A sur le LAN correspondant."],
     traps: ["Tout configurer au hasard sans plan d’adressage.", "Créer des sous-réseaux qui se chevauchent.", "Oublier une route sur un équipement intermédiaire.", "Valider sans raconter l’aller et le retour."]
   }
