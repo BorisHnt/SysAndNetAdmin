@@ -6,10 +6,10 @@ window.NET_PRACTICE_LEVELS = [
     diagram: {
       ratio: "16 / 8",
       nodes: [
-        { id: "A", type: "pc", label: "host A · interface A1", name: "my PC", detail: "IP à corriger", x: 28, y: 70 },
-        { id: "B", type: "pc", label: "host B · interface B1", name: "little brother’s computer", detail: "/24 fixe", x: 28, y: 28 },
-        { id: "C", type: "pc", label: "host C · interface C1", name: "my Mac", detail: "/16 fixe", x: 72, y: 70 },
-        { id: "D", type: "pc", label: "host D · interface D1", name: "little sister’s computer", detail: "IP à corriger", x: 72, y: 28 }
+        { id: "A", type: "pc", label: "host A · interface A1", name: "my PC", detail: "IP donnée", x: 28, y: 70 },
+        { id: "B", type: "pc", label: "host B · interface B1", name: "little brother’s computer", detail: "IP à compléter", x: 28, y: 28 },
+        { id: "C", type: "pc", label: "host C · interface C1", name: "my Mac", detail: "IP à compléter", x: 72, y: 70 },
+        { id: "D", type: "pc", label: "host D · interface D1", name: "little sister’s computer", detail: "IP donnée", x: 72, y: 28 }
       ],
       links: [["A", "B"], ["C", "D"]]
     },
@@ -30,15 +30,15 @@ window.NET_PRACTICE_LEVELS = [
       "Le second lien travaille en /16 : seuls les deux premiers octets définissent le réseau."
     ],
     method: [
-      "Sur le lien A-B, relève l’IP fixe de B et recopie ses trois premiers octets dans A.",
-      "Choisis pour A un dernier octet entre 1 et 254, différent de celui de B.",
-      "Sur le lien C-D, relève les deux premiers octets de C et utilise-les pour D.",
-      "Choisis ensuite deux octets hôte valides sans reprendre exactement l’adresse de C."
+      "Sur le lien A-B, relève l’IP fixe de A et recopie ses trois premiers octets dans B.",
+      "Choisis pour B un dernier octet entre 1 et 254, différent de celui de A.",
+      "Sur le lien C-D, relève les deux premiers octets de D et utilise-les pour C.",
+      "Choisis ensuite deux octets hôte valides sans reprendre exactement l’adresse de D."
     ],
     example:
-      "B = 104.97.23.12/24\nA possible = 104.97.23.42/24\n\nC = 211.191.37.75/16\nD possible = 211.191.80.42/16",
+      "A = 104.96.23.13/24\nB possible = 104.96.23.42/24\n\nD = 211.191.65.76/16\nC possible = 211.191.80.42/16",
     why: [
-      "Avec /24, A et B calculent tous deux le réseau 104.97.23.0.",
+      "Avec /24, A et B calculent tous deux le réseau 104.96.23.0.",
       "Avec /16, C et D calculent tous deux le réseau 211.191.0.0.",
       "La destination étant locale, aucun next hop ni aucune route n’est nécessaire."
     ],
@@ -84,7 +84,7 @@ window.NET_PRACTICE_LEVELS = [
       "Pour C-D, choisis n’importe quel bloc /30 non loopback, puis utilise les deux adresses du milieu."
     ],
     example:
-      "B = 192.168.84.222/27\nA possible = 192.168.84.193/27\n\nRéseau choisi pour C-D = 10.10.10.0/30\nC = 10.10.10.1/30\nD = 10.10.10.2/30",
+      "B = 192.168.130.222/27\nA possible = 192.168.130.193/27\n\nRéseau choisi pour C-D = 10.10.10.0/30\nC = 10.10.10.1/30\nD = 10.10.10.2/30",
     why: [
       "A et B appartiennent au même intervalle .192-.223.",
       "Dans 10.10.10.0/30, .0 est le réseau et .3 le broadcast ; .1 et .2 peuvent communiquer directement."
@@ -132,7 +132,7 @@ window.NET_PRACTICE_LEVELS = [
       "Le switch ne reçoit ni IP utile, ni gateway, ni route."
     ],
     example:
-      "A = 104.198.73.125/25\nB possible = 104.198.73.42/25\nC possible = 104.198.73.126/25\nRéseau commun = 104.198.73.0/25",
+      "A = 104.198.76.125/25\nB possible = 104.198.76.126/25\nC possible = 104.198.76.120/25\nRéseau commun = 104.198.76.0/25",
     why: [
       "Chaque machine calcule le même réseau .0/25.",
       "Le switch diffuse les trames sur le LAN ; aucun routage n’intervient.",
@@ -171,21 +171,21 @@ window.NET_PRACTICE_LEVELS = [
     ],
     principle: [
       "A, B et l’interface R1 reliée au switch doivent être dans le même réseau.",
-      "A se termine par .132 et propose un /28 : le bloc correspondant est .128-.143.",
-      "Les autres interfaces fixes du routeur occupent déjà les blocs bas et haut du même /24 ; le /28 central évite leur chevauchement."
+      "B se termine par .133 et impose un /26 : le bloc correspondant est .128-.191.",
+      "Les autres interfaces fixes du routeur occupent déjà les blocs bas et haut du même /24 ; le /26 central évite leur chevauchement."
     ],
     method: [
-      "Calcule le bloc de A : pas de 16, donc .128 à .143.",
-      "Conserve A en /28.",
-      "Attribue à R1 et B deux adresses différentes parmi .129-.142.",
-      "Utilise aussi /28 sur B et R1."
+      "Calcule le bloc de B : pas de 64, donc .128 à .191.",
+      "Conserve B en /26.",
+      "Attribue à R1 et A deux adresses différentes parmi .129-.190.",
+      "Utilise aussi /26 sur A et R1."
     ],
     example:
-      "A = X.Y.Z.132/28\nR1 possible = X.Y.Z.129/28\nB possible = X.Y.Z.130/28\nRéseau = X.Y.Z.128\nBroadcast = X.Y.Z.143",
+      "B = 73.53.112.133/26\nR1 possible = 73.53.112.129/26\nA possible = 73.53.112.132/26\nRéseau = 73.53.112.128\nBroadcast = 73.53.112.191",
     why: [
-      "Les trois équipements voient le LAN X.Y.Z.128/28 comme directement connecté.",
+      "Les trois équipements voient le LAN 73.53.112.128/26 comme directement connecté.",
       "Le routeur peut être joint par A et B sans route explicite.",
-      "Le /28 n’empiète ni sur le bloc .0-.127 ni sur le bloc .192-.255 des autres interfaces."
+      "Le /26 n’empiète ni sur le bloc .0-.127 ni sur le bloc .192-.255 des autres interfaces."
     ],
     traps: [
       "Un /23 sur R1 chevaucherait plusieurs interfaces du routeur.",
@@ -226,7 +226,7 @@ window.NET_PRACTICE_LEVELS = [
       "Sur B, conserve la route par défaut et remplace sa gateway par l’IP de R2."
     ],
     example:
-      "R1 = 42.50.60.126/25\nA = 42.50.60.10/25\ngateway A = 42.50.60.126\n\nR2 = 150.70.130.254/18\nB = 150.70.130.10/18\ngateway B = 150.70.130.254",
+      "R1 = 76.5.75.126/25\nA = 76.5.75.125/25\ngateway A = 76.5.75.126\n\nR2 = 144.197.75.254/18\nB = 144.197.75.253/18\ngateway B = 144.197.75.254",
     why: [
       "A atteint R1 localement, puis le routeur transmet sur son interface R2.",
       "B utilise R2 pour le chemin retour.",
@@ -310,27 +310,27 @@ window.NET_PRACTICE_LEVELS = [
     ],
     principle: [
       "La topologie contient trois liens, donc trois sous-réseaux distincts.",
-      "Les /30 sont adaptés : deux adresses utilisables par lien.",
+      "Le tirage JSON utilise ici des /28 : les trois liens restent distincts, même si chaque lien n’a besoin que de deux adresses.",
       "Chaque hôte pointe vers son routeur local.",
       "Chaque routeur peut utiliser l’autre routeur comme route par défaut, car le réseau distant est directement connecté à ce voisin."
     ],
     method: [
-      "Pour A-R1, exploite R1 = X.198.14.1 avec le bloc X.198.14.0/30 ; A peut prendre .2.",
-      "Pour R1-R2, exploite R1 = X.198.14.254 avec le bloc .252/30 ; R2 peut prendre .253.",
-      "Pour R2-C, crée un troisième bloc, par exemple X.198.15.0/30 avec R2 .1 et C .2.",
+      "Pour A-R1, exploite R1 = 93.198.14.1 avec le bloc 93.198.14.0/28 ; A peut prendre .2.",
+      "Pour R1-R2, exploite R1 = 93.198.14.254 avec le bloc 93.198.14.240/28 ; R2 peut prendre .253.",
+      "Pour R2-C, utilise le bloc 1.2.3.240/28 avec R2 .252 et C .253.",
       "Configure les routes par défaut : A vers R1, C vers R2, R1 vers R2 et R2 vers R1."
     ],
     example:
-      "A = X.198.14.2/30 -> gateway X.198.14.1\nR1-R2 = X.198.14.254/30 <-> X.198.14.253/30\nR2-C = X.198.15.1/30 <-> X.198.15.2/30\nC gateway = X.198.15.1",
+      "A = 93.198.14.2/28 -> gateway 93.198.14.1\nR1-R2 = 93.198.14.254/28 <-> 93.198.14.253/28\nR2-C = 1.2.3.252/28 <-> 1.2.3.253/28\nC gateway = 1.2.3.252",
     why: [
       "Chaque routeur connaît ses deux liens locaux.",
       "R1 envoie le LAN droit à R2 ; R2 envoie le LAN gauche à R1.",
-      "Les trois blocs /30 ne se chevauchent pas."
+      "Les trois blocs /28 ne se chevauchent pas."
     ],
     traps: [
       "Les deux interfaces d’un même routeur ne doivent pas partager le même sous-réseau.",
       "Une gateway 0.0.0.0 est invalide.",
-      "Sur .252/30, .252 est le réseau et .255 le broadcast."
+      "Sur 93.198.14.240/28, .240 est le réseau et .255 le broadcast."
     ]
   },
   {
@@ -361,22 +361,22 @@ window.NET_PRACTICE_LEVELS = [
       ]
     ],
     principle: [
-      "Internet possède une route vers le préfixe concret 72.44.18.0/26.",
+      "Internet possède une route vers le préfixe concret 146.29.78.0/26.",
       "Toutes les adresses internes doivent donc pouvoir être regroupées dans ce /26.",
       "Il faut découper ce bloc en LAN C, LAN D et lien de transit R1-R2 sans chevauchement.",
       "R1 annonce l’agrégat vers R2 et Internet annonce le même agrégat vers R1."
     ],
     method: [
-      "Réserve 72.44.18.0/28 pour C : R2 = .1, C = .2.",
-      "Réserve 72.44.18.16/28 pour D : R2 = .17, D = .18.",
-      "Réserve 72.44.18.60/30 pour le transit : R2 = .61, R1 = .62.",
-      "Sur R1, route 72.44.18.0/26 via 72.44.18.61 ; sur R2, route par défaut via 72.44.18.62.",
-      "Sur Internet, garde 72.44.18.0/26 et utilise l’IP publique de R1 comme gateway."
+      "Réserve 146.29.78.0/28 pour D : R2 = .1, D = .2.",
+      "Réserve 146.29.78.16/28 pour C : R2 = .17, C = .18.",
+      "Réserve 146.29.78.60/30 pour le transit : R2 = .61, R1 = .62.",
+      "Sur R1, route 146.29.78.0/26 via 146.29.78.61 ; sur R2, route par défaut via 146.29.78.62.",
+      "Sur Internet, garde 146.29.78.0/26 et utilise l’IP publique de R1 comme gateway."
     ],
     example:
-      "C = 72.44.18.2/28 -> gateway 72.44.18.1\nD = 72.44.18.18/28 -> gateway 72.44.18.17\nR2-R1 = 72.44.18.61/30 <-> 72.44.18.62/30\nR1: 72.44.18.0/26 via 72.44.18.61\nR2: default via 72.44.18.62\nInternet: 72.44.18.0/26 via 163.90.250.12",
+      "D = 146.29.78.2/28 -> gateway 146.29.78.1\nC = 146.29.78.18/28 -> gateway 146.29.78.17\nR2-R1 = 146.29.78.61/30 <-> 146.29.78.62/30\nR1: 146.29.78.0/26 via 146.29.78.61\nR2: default via 146.29.78.62\nInternet: 146.29.78.0/26 via 163.228.250.12",
     why: [
-      "Les trois sous-réseaux tiennent dans 72.44.18.0 à 72.44.18.63.",
+      "Les trois sous-réseaux tiennent dans 146.29.78.0 à 146.29.78.63.",
       "R1 résume tous les réseaux internes par une seule route /26.",
       "Internet peut répondre à C et D avec une route unique."
     ],
@@ -428,16 +428,16 @@ window.NET_PRACTICE_LEVELS = [
       "Les préfixes générés fournissent des familles d’adresses permettant de construire les réseaux."
     ],
     method: [
-      "Place A, B et R1 dans E.198.F.0/25 ; A et B utilisent R1 comme gateway.",
-      "Place R1-R2 dans J.K.17.252/30 avec R1 .254 et R2 .253.",
-      "Place C dans J.K.18.0/24 derrière R2.",
-      "Pour D, relève la gateway G1.G2.G3.G4 imposée dans sa route. Attribue cette IP à R2 et place D dans le même sous-réseau, par exemple G1.G2.G3.0/24.",
+      "Place A, B et R1 dans 42.5.4.0/25 ; A et B utilisent R1 comme gateway.",
+      "Place R1-R2 dans 192.168.1.0/30 avec R1 .2 et R2 .1.",
+      "Place C dans 76.3.4.0/24 derrière R2.",
+      "Pour D, utilise le réseau 113.187.64.0/18 : R2 prend 113.187.77.249 et D prend 113.187.77.250.",
       "Sur R1, crée une route vers chacun des réseaux C et D via R2, avant la route par défaut Internet.",
       "Sur R2, utilise R1 comme route par défaut.",
       "Sur Internet, renseigne trois routes de retour : LAN A-B, LAN C et le réseau construit autour de la gateway fixe de D."
     ],
     example:
-      "LAN A-B = E.198.F.0/25, R1 = .1\nTransit = J.K.17.252/30, R1 = .254, R2 = .253\nLAN C = J.K.18.0/24\nGateway D imposée = G1.G2.G3.G4\nR2-D = G1.G2.G3.G4/24, D = même /24 avec une autre IP\nInternet -> E.198.F.0/22, J.K.18.0/24 et G1.G2.G3.0/24 via 163.172.250.12",
+      "LAN A-B = 42.5.4.0/25, R1 = .1\nTransit = 192.168.1.0/30, R1 = .2, R2 = .1\nLAN C = 76.3.4.0/24, R2 = .1, C = .2\nLAN D = 113.187.64.0/18, R2 = 113.187.77.249, D = 113.187.77.250\nInternet -> 42.5.4.0/24, 76.3.4.0/24 et 113.187.64.0/18 via 163.172.250.12",
     why: [
       "R1 sait distinguer les deux réseaux derrière R2 avant d’utiliser sa route Internet.",
       "R2 renvoie tout réseau inconnu à R1.",
@@ -490,23 +490,23 @@ window.NET_PRACTICE_LEVELS = [
       ]
     ],
     principle: [
-      "Les adresses fixes suggèrent de ranger tous les réseaux internes dans A.B.C.0/24.",
-      "Le LAN H1-H2 occupe A.B.C.0/25.",
-      "Le LAN H4 occupe A.B.C.128/26.",
-      "Le LAN H3 peut occuper A.B.C.192/27 et le transit R1-R2 A.B.C.252/30.",
-      "Internet peut alors résumer tous les réseaux internes par A.B.C.0/24."
+      "Les adresses fixes suggèrent de ranger tous les réseaux internes dans 130.137.107.0/24.",
+      "Le LAN H1-H2 occupe 130.137.107.0/25.",
+      "Le LAN H4 occupe 130.137.107.128/26.",
+      "Le LAN H3 peut occuper 130.137.107.192/27 et le transit R1-R2 130.137.107.252/30.",
+      "Internet peut alors résumer tous les réseaux internes par 130.137.107.0/24."
     ],
     method: [
-      "Configure H2 dans A.B.C.0/25 avec la gateway fixe A.B.C.1.",
-      "Mets R1-R2 en /30 : R1 A.B.C.254, R2 A.B.C.253.",
-      "Configure l’interface R2-H4 en A.B.C.129/26 pour correspondre à la gateway fixe de H4.",
-      "Configure R2-H3 en A.B.C.193/27 et H3 en A.B.C.194/27 avec gateway .193.",
-      "Sur R1, route A.B.C.192/27 via .253 ; la route fixe A.B.C.128/26 couvre H4.",
+      "Configure H2 dans 130.137.107.0/25 avec la gateway fixe 130.137.107.1.",
+      "Mets R1-R2 en /30 : R1 130.137.107.254, R2 130.137.107.253.",
+      "Configure l’interface R2-H4 en 130.137.107.129/26 pour correspondre à la gateway fixe de H4.",
+      "Configure R2-H3 en 130.137.107.193/27 et H3 en 130.137.107.194/27 avec gateway .193.",
+      "Sur R1, route 130.137.107.192/27 via .253 ; la route fixe 130.137.107.128/26 couvre H4.",
       "Sur R2, route par défaut via .254.",
-      "Sur Internet, remplace le /31 par A.B.C.0/24 via 163.172.250.12."
+      "Sur Internet, remplace le /31 par 130.137.107.0/24 via 163.172.250.12."
     ],
     example:
-      "H1/H2/R1 = A.B.C.0/25\nH4/R2 = A.B.C.128/26\nH3/R2 = A.B.C.192/27\nR1/R2 = A.B.C.252/30\nInternet return = A.B.C.0/24 via 163.172.250.12",
+      "H1/H2/R1 = 130.137.107.0/25\nH4/R2 = 130.137.107.128/26\nH3/R2 = 130.137.107.192/27\nR1/R2 = 130.137.107.252/30\nInternet return = 130.137.107.0/24 via 163.172.250.12",
     why: [
       "Chaque lien dispose d’un sous-réseau distinct.",
       "Les sous-réseaux internes sont tous inclus dans le même /24 sans chevauchement.",

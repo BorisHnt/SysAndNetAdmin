@@ -1335,6 +1335,19 @@ code {
   font-weight: 800;
 }
 
+.network-field code.network-value-asked {
+  border-color: #4e9b59;
+  background: #d9f7d7;
+  color: #123d18;
+  font-weight: 800;
+}
+
+.network-field code.network-value-asked small {
+  color: #22642b;
+  font-size: 0.5rem;
+  text-transform: uppercase;
+}
+
 .network-route-list {
   margin-top: 0.32rem;
   border: 1px solid #79b679;

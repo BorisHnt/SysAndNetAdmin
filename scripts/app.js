@@ -347,21 +347,25 @@ function renderNetPracticeAdvanced(topic, concepts, open = false) {
 function renderNetworkNode(node, levelNumber) {
   const displayName = node.name || node.label;
   const details = (window.NET_PRACTICE_DIAGRAM_DETAILS || {})[levelNumber]?.[node.id];
+  const askedIps = new Set(details?.askedIps || []);
   const interfaces = (details?.interfaces || [])
     .map(
-      ([name, ip, mask]) => `
+      ([name, ip, mask]) => {
+        const ipAsked = askedIps.has(name);
+        return `
         <div class="network-interface-card">
           <p>interface ${escapeHtml(name)}</p>
           <div class="network-field">
             <span>IP</span>
-            <code>${escapeHtml(ip)}</code>
+            <code class="${ipAsked ? "network-value-asked" : ""}" title="${ipAsked ? "IP à saisir dans NetPractice" : "IP déjà donnée ou non éditable dans NetPractice"}">${escapeHtml(ip)}${ipAsked ? " <small>à saisir</small>" : ""}</code>
           </div>
           <div class="network-field">
             <span>Mask</span>
             <code>${renderMaskValue(mask)}</code>
           </div>
         </div>
-      `,
+      `;
+      },
     )
     .join("");
   const routes = (details?.routes || [])
@@ -787,7 +791,7 @@ function renderNetPracticeLevels(topicId) {
           <strong>Mode training :</strong> la forme du niveau reste la même. Les IP sont générées à partir du login, donc un même login retrouve les mêmes valeurs pour un même niveau. Avec un autre login, les nombres changent mais le raisonnement reste identique. En évaluation, les niveaux 6 à 10 et leurs valeurs sont tirés de manière variable.
         </p>
         <p class="diagram-values-note" data-reading>
-          Les IP affichées dans les box correspondent à l’exemple corrigé du site. Ton login peut afficher d’autres nombres : les blocs et la méthode de calcul restent les mêmes.
+          Les IP affichées dans les box correspondent à l’exemple corrigé du site. Les IP en vert sont les champs à saisir dans NetPractice. Ton login peut afficher d’autres nombres : les blocs et la méthode de calcul restent les mêmes.
         </p>
       </header>
       ${levels
