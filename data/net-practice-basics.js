@@ -41,6 +41,38 @@ window.NET_PRACTICE_BASICS = {
         "Une route est un panneau : « pour aller là-bas, passe par ici ». Elle ne donne pas forcément la destination finale. Elle indique le next hop, c’est-à-dire le prochain voisin."
     }
   ],
+  referenceCards: [
+    {
+      title: "IPv4 dans NetPractice",
+      body:
+        "NetPractice travaille avec des IPv4 : quatre nombres de 0 à 255. Le masque découpe cette IP en deux parties : le réseau, qui doit être commun aux voisin·es, et l’hôte, qui identifie l’interface précise."
+    },
+    {
+      title: "Adresse réseau et broadcast",
+      body:
+        "Dans un bloc, la première adresse représente le réseau et la dernière représente le broadcast. Elles servent à nommer le bloc, pas à configurer une interface. Les machines utilisent seulement les adresses entre les deux."
+    },
+    {
+      title: "Privé, public et Internet",
+      body:
+        "Les plages 10.0.0.0/8, 172.16.0.0/12 et 192.168.0.0/16 sont privées. Dans les niveaux avec Internet, évite de placer ces réseaux côté Internet : le bloc Internet attend des routes vers des réseaux publics affichés par l’exercice."
+    },
+    {
+      title: "Switch",
+      body:
+        "Un switch regroupe plusieurs interfaces dans le même réseau local. Il ne choisit pas de route, ne sert pas de gateway et ne sépare pas les sous-réseaux."
+    },
+    {
+      title: "Routeur",
+      body:
+        "Un routeur relie plusieurs réseaux. Chaque interface du routeur appartient à un réseau différent ; deux interfaces du même routeur ne doivent pas couvrir des plages qui se chevauchent."
+    },
+    {
+      title: "Destination et next hop",
+      body:
+        "La destination indique le réseau que l’on veut atteindre. Le next hop indique le prochain voisin direct à qui remettre le paquet. Une route par défaut, 0.0.0.0/0, sert quand aucune route plus précise ne correspond."
+    }
+  ],
   mentalDiagram: "Machine A\n    |\n  Switch\n    |\n Routeur\n    |\n Internet",
   mentalExplanation: [
     "Machine A ne connaît pas directement Internet.",

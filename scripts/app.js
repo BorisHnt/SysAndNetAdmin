@@ -145,6 +145,16 @@ function renderNetPracticeBasics(topicId) {
       `,
     )
     .join("");
+  const referenceCards = (basics.referenceCards || [])
+    .map(
+      (card) => `
+        <article class="reference-card">
+          <h4>${escapeHtml(card.title)}</h4>
+          <p data-reading>${escapeHtml(card.body)}</p>
+        </article>
+      `,
+    )
+    .join("");
 
   const maskRows = basics.masks
     .map(
@@ -188,6 +198,15 @@ function renderNetPracticeBasics(topicId) {
           </div>
         </div>
         <div class="core-ideas">${ideas}</div>
+        ${
+          referenceCards
+            ? `
+              <div class="reference-cards" aria-label="Repères NetPractice">
+                ${referenceCards}
+              </div>
+            `
+            : ""
+        }
       </section>
 
       <section class="course-section mental-model">
