@@ -205,32 +205,48 @@ window.NET_PRACTICE_CONCRETE = {
   "08": {
     screen: ["Deux LAN se trouvent derrière R2, puis R1 relie l’ensemble à Internet.", "Internet fournit une route résumée couvrant une plage de 64 adresses."],
     goal: "Découper une plage en sous-réseaux puis annoncer l’ensemble avec une route agrégée.",
-    networks: ["C ↔ R2 = premier LAN", "D ↔ R2 = second LAN", "R2 ↔ R1 = transit", "R1 ↔ Internet = réseau externe"],
+    networks: ["D1 ↔ R23 = premier LAN /28", "C1 ↔ R22 = second LAN /28", "R21 ↔ R13 = transit /30", "R12 ↔ Internet = réseau externe"],
     rules: ["Un /26 couvre 64 adresses.", "Les sous-réseaux internes doivent rester à l’intérieur de cette plage.", "R1 peut annoncer le /26 entier au lieu d’une route par LAN."],
     deductions: [
       {
-        look: "Internet annonce 72.44.18.0/26.",
-        meaning: "La plage disponible va de 72.44.18.0 à 72.44.18.63.",
+        look: "Internet annonce 146.29.78.0/26.",
+        meaning: "La plage disponible va de 146.29.78.0 à 146.29.78.63.",
         deduction: "On peut y placer deux LAN /28 et un transit /30 sans chevauchement.",
-        value: "LAN C = .0/28 ; LAN D = .16/28 ; transit = .60/30.",
+        value: "LAN D = .0/28 ; LAN C = .16/28 ; transit = .60/30.",
         why: "Ces blocs occupent .0-.15, .16-.31 et .60-.63, tous inclus dans le /26."
       },
       {
         look: "C et D ont chacun besoin d’une gateway locale.",
         meaning: "R2 doit posséder une interface dans chaque LAN.",
         deduction: "On choisit les premières adresses hôtes pour R2.",
-        value: "R2-C .1, C .2 ; R2-D .17, D .18.",
+        value: "R23-D1 : .1 et .2 ; R22-C1 : .17 et .18.",
         why: "Chaque PC partage son /28 avec l’interface correspondante de R2."
       },
       {
         look: "R1 et R2 doivent être voisins sur le transit.",
         meaning: "Le /30 .60-.63 fournit .61 et .62.",
         deduction: "R2 utilise .61 et R1 .62.",
-        value: "R1 : 72.44.18.0/26 via 72.44.18.61 ; R2 : default via 72.44.18.62.",
+        value: "R1 : 146.29.78.0/26 via 146.29.78.61 ; R2 : default via 146.29.78.62.",
         why: "R1 envoie tout le bloc interne à R2, et R2 envoie l’extérieur à R1."
       }
     ],
-    solution: "C 72.44.18.2/28 -> 72.44.18.1\nD 72.44.18.18/28 -> 72.44.18.17\nR2 72.44.18.61/30 <-> R1 72.44.18.62/30\nR1 : 72.44.18.0/26 via 72.44.18.61\nR2 : default via 72.44.18.62\nInternet : 72.44.18.0/26 via l’IP publique de R1",
+    beginnerFocus: {
+      title: "Pourquoi R22 = .17 et C1 = .18, et pas .3 et .4 ?",
+      intro:
+        "Parce que chaque câble qui part du routeur doit représenter un quartier réseau différent. On ne choisit pas les nombres simplement parce qu’ils se suivent.",
+      steps: [
+        "Avec /28, chaque quartier contient 16 adresses.",
+        "Le premier quartier va de 146.29.78.0 à 146.29.78.15. .0 est le réseau, .15 est le broadcast, et .1 à .14 sont utilisables.",
+        "R23 = 146.29.78.1 et D1 = 146.29.78.2 utilisent déjà ce premier quartier.",
+        ".3 et .4 appartiennent encore au même quartier .0-.15. Les utiliser pour R22 et C1 mélangerait deux câbles différents dans le même réseau.",
+        "Le quartier /28 suivant commence à 146.29.78.16 et finit à 146.29.78.31.",
+        ".16 est l’adresse réseau et .31 le broadcast. Les premières IP utilisables sont donc .17 et .18.",
+        "On place R22 en .17 et C1 en .18. Ce choix est facile à lire, mais .20 et .29 auraient aussi fonctionné s’ils étaient libres."
+      ],
+      result:
+        "LAN domicile : 146.29.78.0/28\nR23 = 146.29.78.1\nD1 = 146.29.78.2\n\nLAN bureau : 146.29.78.16/28\nR22 = 146.29.78.17\nC1 = 146.29.78.18"
+    },
+    solution: "D1 146.29.78.2/28 -> R23 146.29.78.1\nC1 146.29.78.18/28 -> R22 146.29.78.17\nR21 146.29.78.61/30 <-> R13 146.29.78.62/30\nR1 : 146.29.78.0/26 via 146.29.78.61\nR2 : default via 146.29.78.62\nInternet : 146.29.78.0/26 via 163.228.250.12",
     packet: ["C vers D : C -> R2 -> D.", "C vers Internet : C -> R2 -> R1 -> Internet.", "Retour : Internet -> R1 grâce au /26, puis R1 -> R2, puis R2 choisit le bon LAN."],
     traps: ["Créer un sous-réseau hors de .0-.63.", "Faire chevaucher les deux /28.", "Annoncer une gateway qui n’est pas voisine."]
   },

@@ -299,8 +299,41 @@ function renderNetPracticeAdvanced(topic, concepts, open = false) {
   `;
 }
 
-function renderNetworkNode(node) {
+function renderNetworkNode(node, levelNumber) {
   const displayName = node.name || node.label;
+  const details = (window.NET_PRACTICE_DIAGRAM_DETAILS || {})[levelNumber]?.[node.id];
+  const interfaces = (details?.interfaces || [])
+    .map(
+      ([name, ip, mask]) => `
+        <div class="network-interface">
+          <b>${escapeHtml(name)}</b>
+          <code>${escapeHtml(ip)}</code>
+          <code>${escapeHtml(mask)}</code>
+        </div>
+      `,
+    )
+    .join("");
+  const routes = (details?.routes || [])
+    .map(
+      ([destination, nextHop]) => `
+        <div class="network-route">
+          <code>${escapeHtml(destination)}</code>
+          <span aria-hidden="true">→</span>
+          <code>${escapeHtml(nextHop)}</code>
+        </div>
+      `,
+    )
+    .join("");
+  const networkData =
+    interfaces || routes || details?.note
+      ? `
+        <div class="network-node-data">
+          ${interfaces ? `<div class="network-interface-list">${interfaces}</div>` : ""}
+          ${routes ? `<div class="network-route-list"><small>Routes</small>${routes}</div>` : ""}
+          ${details?.note ? `<p>${escapeHtml(details.note)}</p>` : ""}
+        </div>
+      `
+      : "";
 
   return `
     <div
@@ -318,6 +351,7 @@ function renderNetworkNode(node) {
       <small>${escapeHtml(node.label)}</small>
       <strong>${escapeHtml(displayName)}</strong>
       <span>${escapeHtml(node.detail)}</span>
+      ${networkData}
     </div>
   `;
 }
@@ -354,7 +388,7 @@ function renderNetworkDiagram(level) {
             })
             .join("")}
         </svg>
-        ${level.diagram.nodes.map(renderNetworkNode).join("")}
+        ${level.diagram.nodes.map((node) => renderNetworkNode(node, level.number)).join("")}
       </div>
     </div>
   `;
@@ -613,6 +647,17 @@ function renderConcreteWalkthrough(level) {
       `,
     )
     .join("");
+  const beginnerFocus = guide.beginnerFocus
+    ? `
+      <section class="beginner-focus">
+        <p class="topic-kicker">Explication pure débutant</p>
+        <h5>${escapeHtml(guide.beginnerFocus.title)}</h5>
+        <p data-reading>${escapeHtml(guide.beginnerFocus.intro)}</p>
+        <ol>${renderTextList(guide.beginnerFocus.steps)}</ol>
+        <pre><code>${escapeHtml(guide.beginnerFocus.result)}</code></pre>
+      </section>
+    `
+    : "";
 
   return `
     <section class="concrete-walkthrough" aria-label="Résolution concrète du niveau ${escapeHtml(level.number)}">
@@ -642,6 +687,7 @@ function renderConcreteWalkthrough(level) {
         </div>
         ${deductions}
       </section>
+      ${beginnerFocus}
       <section class="final-solution">
         <h5>E. Solution finale de l’exemple</h5>
         <pre><code>${escapeHtml(guide.solution)}</code></pre>
@@ -681,6 +727,9 @@ function renderNetPracticeLevels(topicId) {
         </p>
         <p class="generated-values-note" data-reading>
           <strong>Mode training :</strong> la forme du niveau reste la même. Les IP sont générées à partir du login, donc un même login retrouve les mêmes valeurs pour un même niveau. Avec un autre login, les nombres changent mais le raisonnement reste identique. En évaluation, les niveaux 6 à 10 et leurs valeurs sont tirés de manière variable.
+        </p>
+        <p class="diagram-values-note" data-reading>
+          Les IP affichées dans les box correspondent à l’exemple corrigé du site. Ton login peut afficher d’autres nombres : les blocs et la méthode de calcul restent les mêmes.
         </p>
       </header>
       ${levels
