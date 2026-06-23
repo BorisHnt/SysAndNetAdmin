@@ -32,6 +32,32 @@ function slugify(value) {
     .replace(/(^-|-$)/g, "");
 }
 
+function prefixToDottedMask(prefix) {
+  const bits = Number(String(prefix).replace("/", ""));
+
+  if (!Number.isInteger(bits) || bits < 0 || bits > 32) {
+    return "";
+  }
+
+  return Array.from({ length: 4 }, (_, index) => {
+    const remainingBits = Math.min(8, Math.max(0, bits - index * 8));
+    return remainingBits === 0 ? 0 : 256 - 2 ** (8 - remainingBits);
+  }).join(".");
+}
+
+function renderMaskValue(mask) {
+  const maskText = String(mask);
+
+  if (!maskText.startsWith("/")) {
+    return escapeHtml(maskText);
+  }
+
+  const dottedMask = prefixToDottedMask(maskText);
+  return dottedMask
+    ? `${escapeHtml(dottedMask)} <small>${escapeHtml(maskText)}</small>`
+    : escapeHtml(maskText);
+}
+
 function renderTags(tags) {
   if (!Array.isArray(tags) || tags.length === 0) {
     return "";
@@ -305,10 +331,16 @@ function renderNetworkNode(node, levelNumber) {
   const interfaces = (details?.interfaces || [])
     .map(
       ([name, ip, mask]) => `
-        <div class="network-interface">
-          <b>${escapeHtml(name)}</b>
-          <code>${escapeHtml(ip)}</code>
-          <code>${escapeHtml(mask)}</code>
+        <div class="network-interface-card">
+          <p>interface ${escapeHtml(name)}</p>
+          <div class="network-field">
+            <span>IP</span>
+            <code>${escapeHtml(ip)}</code>
+          </div>
+          <div class="network-field">
+            <span>Mask</span>
+            <code>${renderMaskValue(mask)}</code>
+          </div>
         </div>
       `,
     )
@@ -318,7 +350,7 @@ function renderNetworkNode(node, levelNumber) {
       ([destination, nextHop]) => `
         <div class="network-route">
           <code>${escapeHtml(destination)}</code>
-          <span aria-hidden="true">→</span>
+          <span aria-hidden="true">=&gt;</span>
           <code>${escapeHtml(nextHop)}</code>
         </div>
       `,
