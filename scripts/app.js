@@ -803,6 +803,15 @@ function renderNav() {
               <span aria-hidden="true">↓</span>
               <strong>Les 10 niveaux, expliqués pas à pas</strong>
             </button>
+            <button
+              class="nav-subsection"
+              type="button"
+              data-topic-id="net-practice"
+              data-page-url="net-practice-visual.html"
+            >
+              <span aria-hidden="true">↗</span>
+              <strong>Les 10 niveaux, expliqués autrement</strong>
+            </button>
           `
           : "";
 
@@ -972,6 +981,11 @@ function search(query) {
 elements.nav.addEventListener("click", (event) => {
   const button = event.target.closest("button[data-topic-id]");
   if (!button) {
+    return;
+  }
+
+  if (button.dataset.pageUrl) {
+    window.location.href = button.dataset.pageUrl;
     return;
   }
 

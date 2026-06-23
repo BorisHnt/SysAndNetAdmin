@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>NetPractice - Les 10 niveaux expliqués autrement</title>
+    <meta
+      name="description"
+      content="Visualisation interactive des dix niveaux NetPractice : sous-réseaux, interfaces, IP communes et choix des masks."
+    >
+    <link rel="stylesheet" href="styles/net-practice-visual.css">
+  </head>
+  <body>
+    <a class="skip-link" href="#visual-main">Aller au schéma</a>
+
+    <header class="visual-header">
+      <a class="back-link" href="index.html">← Retour au notebook</a>
+      <div>
+        <p>Sys & Net Admin</p>
+        <h1>Les 10 niveaux, expliqués autrement</h1>
+        <span>Choisis un réseau, observe les parties communes des IP, puis déplace les équipements pour reconstruire le trajet.</span>
+      </div>
+    </header>
+
+    <nav class="level-selector" aria-label="Choisir un niveau">
+      <div id="level-tabs" role="tablist"></div>
+    </nav>
+
+    <main id="visual-main" class="visual-main">
+      <section class="level-introduction">
+        <div>
+          <p id="level-focus"></p>
+          <h2 id="level-title"></h2>
+          <span id="level-summary"></span>
+        </div>
+        <button id="reset-layout" type="button">Réinitialiser les positions</button>
+      </section>
+
+      <section class="visual-workspace">
+        <div class="map-column">
+          <div class="map-help">
+            <span>Déplace les équipements à la souris ou au doigt.</span>
+            <span>Clique sur un sous-réseau pour l’isoler.</span>
+          </div>
+          <div id="map-scroll" class="map-scroll">
+            <div id="network-map" class="network-map" aria-label="Schéma interactif du niveau"></div>
+          </div>
+        </div>
+
+        <aside class="subnet-panel" aria-label="Sous-réseaux du niveau">
+          <div class="panel-heading">
+            <p>Quartiers réseau</p>
+            <h2>Sous-réseaux</h2>
+          </div>
+          <div id="subnet-list" class="subnet-list"></div>
+          <button id="show-all-subnets" class="show-all" type="button">Afficher tout le réseau</button>
+        </aside>
+      </section>
+
+      <section id="subnet-explanation" class="subnet-explanation" aria-live="polite"></section>
+    </main>
+
+    <script src="data/net-practice-levels.js"></script>
+    <script src="data/net-practice-diagram-details.js"></script>
+    <script src="data/net-practice-visual.js"></script>
+    <script src="scripts/net-practice-visual.js"></script>
+  </body>
+</html>
