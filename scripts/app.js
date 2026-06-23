@@ -214,7 +214,7 @@ function renderNetPracticeBasics(topicId) {
         <div class="table-scroll">
           <table>
             <thead>
-              <tr><th>Préfixe</th><th>Mask</th><th>Taille du bloc</th></tr>
+              <tr><th>Préfixe</th><th>Mask</th><th>Adresses</th><th>Pas de calcul</th></tr>
             </thead>
             <tbody>${maskRows}</tbody>
           </table>

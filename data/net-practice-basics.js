@@ -59,18 +59,26 @@ window.NET_PRACTICE_BASICS = {
       "Le next hop doit être joignable directement. Il doit donc être dans le même réseau local que l’interface qui utilise cette route."
   },
   masks: [
-    ["/24", "255.255.255.0", "256"],
-    ["/25", "255.255.255.128", "128"],
-    ["/26", "255.255.255.192", "64"],
-    ["/27", "255.255.255.224", "32"],
-    ["/28", "255.255.255.240", "16"],
-    ["/29", "255.255.255.248", "8"],
-    ["/30", "255.255.255.252", "4"]
+    ["/0", "0.0.0.0", "toutes les IPv4", "route par défaut, pas un LAN"],
+    ["/8", "255.0.0.0", "16 777 216", "pas de 256 dans le 2e octet"],
+    ["/16", "255.255.0.0", "65 536", "pas de 256 dans le 3e octet"],
+    ["/18", "255.255.192.0", "16 384", "pas de 64 dans le 3e octet"],
+    ["/22", "255.255.252.0", "1 024", "pas de 4 dans le 3e octet"],
+    ["/23", "255.255.254.0", "512", "pas de 2 dans le 3e octet"],
+    ["/24", "255.255.255.0", "256", "pas de 256 dans le 4e octet"],
+    ["/25", "255.255.255.128", "128", "pas de 128 dans le 4e octet"],
+    ["/26", "255.255.255.192", "64", "pas de 64 dans le 4e octet"],
+    ["/27", "255.255.255.224", "32", "pas de 32 dans le 4e octet"],
+    ["/28", "255.255.255.240", "16", "pas de 16 dans le 4e octet"],
+    ["/29", "255.255.255.248", "8", "pas de 8 dans le 4e octet"],
+    ["/30", "255.255.255.252", "4", "pas de 4 dans le 4e octet"],
+    ["/31", "255.255.255.254", "2", "deux adresses seulement"]
   ],
   maskTip: {
-    rule: "Taille du bloc = 256 - dernier nombre du mask.",
+    rule:
+      "Repère le premier octet du mask qui n’est ni 255 ni 0. Le pas dans cet octet vaut 256 moins sa valeur.",
     example:
-      "Mask : 255.255.255.128\n256 - 128 = 128\nLes réseaux avancent donc par blocs de 128 adresses."
+      "/25 : 255.255.255.128\nOctet actif : le 4e\n256 - 128 = 128\nBlocs : .0-.127 puis .128-.255\n\n/18 : 255.255.192.0\nOctet actif : le 3e\n256 - 192 = 64\nBlocs du 3e octet : 0-63, 64-127, 128-191, 192-255"
   },
   guidedExample: {
     ip: "28.141.155.227",
