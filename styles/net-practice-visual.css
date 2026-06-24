@@ -271,19 +271,6 @@ a:focus-visible,
   stroke-width: 3;
 }
 
-.subnet-label {
-  position: absolute;
-  z-index: 2;
-  transform: translate(-50%, -50%);
-  border: 1px solid currentColor;
-  background: var(--surface);
-  padding: 0.18rem 0.38rem;
-  font-size: 0.64rem;
-  font-weight: 700;
-  line-height: 1.2;
-  pointer-events: none;
-}
-
 .visual-node {
   position: absolute;
   z-index: 3;

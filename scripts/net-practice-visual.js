@@ -186,17 +186,6 @@ function renderMap() {
         )
         .join("")}
     </svg>
-    ${visual.subnets
-      .map(
-        (subnet, index) => `
-          <span
-            class="subnet-label"
-            data-subnet-id="${escapeHtml(subnet.id)}"
-            style="color:${getSubnetColor(index)}"
-          >${escapeHtml(subnet.cidr)}</span>
-        `,
-      )
-      .join("")}
     ${level.diagram.nodes.map(renderNode).join("")}
   `;
 
@@ -290,7 +279,8 @@ function renderOverviewExplanation() {
       <p class="visual-eyebrow">Vue complète</p>
       <h2>Tous les quartiers sont visibles</h2>
       <p>
-        Chaque couleur représente un sous-réseau distinct. Deux interfaces placées sur la même couleur doivent partager le réseau indiqué par le label.
+        Chaque couleur représente un sous-réseau distinct. Deux interfaces reliées par la même couleur doivent pouvoir communiquer directement.
+        Les limites et les adresses de ce réseau sont détaillées dans le panneau de droite.
       </p>
     </div>
     <div>
@@ -364,12 +354,6 @@ function updateGraphics() {
     area.setAttribute("width", ((right - left) / mapRect.width) * 100);
     area.setAttribute("height", ((bottom - top) / mapRect.height) * 100);
 
-    const [fromId, toId] = subnet.links[0];
-    const from = nodes[fromId];
-    const to = nodes[toId];
-    const label = elements.map.querySelector(`.subnet-label[data-subnet-id="${subnet.id}"]`);
-    label.style.left = `${(Number(from.dataset.x) + Number(to.dataset.x)) / 2}%`;
-    label.style.top = `${(Number(from.dataset.y) + Number(to.dataset.y)) / 2}%`;
   });
 }
 
@@ -477,7 +461,7 @@ function applySubnetFilter() {
   });
 
   elements.map
-    .querySelectorAll(".visual-link, .visual-link-band, .subnet-area, .subnet-label")
+    .querySelectorAll(".visual-link, .visual-link-band, .subnet-area")
     .forEach((item) => {
       item.classList.toggle("is-dimmed", Boolean(activeId) && item.dataset.subnetId !== activeId);
     });
